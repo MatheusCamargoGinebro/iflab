@@ -6,6 +6,7 @@ function createWindow() {
     width: 1280,
     height: 720,
     autoHideMenuBar: true,
+    icon: "./src/assets/icons/iflab/icon-512.png",
     webPreferences: {
       nodeIntegration: true,
     },
