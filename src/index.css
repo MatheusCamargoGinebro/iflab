@@ -10,17 +10,3 @@
     /*Scroll da página*/
     scroll-behavior: smooth;
 }
-
-/*Configurações de scrollbar*/
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track{
-    background: rgba(203, 5, 5, 0);
-}
-
-::-webkit-scrollbar-thumb{
-    background-color: #4b5563;
-    border-radius: 1px;
-}

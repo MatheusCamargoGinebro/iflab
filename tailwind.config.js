@@ -9,7 +9,7 @@ export default {
     colors: {
       iflab_white: "#FFFFFF",
       iflab_white_dark: "#E5E5E5",
-      iflab_white_light: "#F7F7F7",
+      iflab_white_light: "#ededed",
 
       iflab_gray: "#555555",
       iflab_gray_dark: "#252525",
