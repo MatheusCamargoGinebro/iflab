@@ -1,26 +1,19 @@
+import Password_Input from "../../components/inputs/Password_Input";
+import Text_Input from "../../components/inputs/Text_Input";
+
+import user from "../../assets/icons/UI/user.png";
+import email from "../../assets/icons/UI/email.png";
+
 function NotFound() {
   return (
     <>
-      <h1 className="text-3xl font-bold underline bg-slate-600">
-        Ocorreu um erro :(
-      </h1>
-      <ul>
-        <li>
-          <a href="./#">Sign</a>
-        </li>
-        <li>
-          <a href="./#/Home">Home</a>
-        </li>
-        <li>
-          <a href="./#/Inventory">Inventory</a>
-        </li>
-        <li>
-          <a href="./#/AccessManager">AccessManager</a>
-        </li>
-        <li>
-          <a href="./#/NotFoundadasdasd">NotFound</a>
-        </li>
-      </ul>
+      <div className="bg-slate-500 w-screen h-screen flex justify-center items-center">
+        <div className="bg-slate-100 p-5 w-[120rem]">
+          <Text_Input placeholder="Digite seu nome..." icon={user} alt="usuário"/>
+          <Text_Input placeholder="Digite seu email..." icon={email} alt="email"/>
+          <Password_Input />
+        </div>
+      </div>
     </>
   );
 }
