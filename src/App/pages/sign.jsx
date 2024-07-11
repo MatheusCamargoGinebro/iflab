@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Password_Input from "../../components/inputs/Password_Input";
 import Text_Input from "../../components/inputs/Text_Input";
 import Primary_button from "../../components/buttons/Primary_button";
+import Tertiary_button from "../../components/buttons/Tertiary_button";
 
 import lab from "../../assets/images/lab.png";
 import logo from "../../assets/images/logo.png";
@@ -62,58 +63,100 @@ function Sign() {
           {/* Register */}
           {isInRegister && (
             <form action="" className="w-full h-full flex flex-col">
-              <div className="w-full flex flex-col px-16 pt-16 gap-10">
-                <Text_Input
-                  id="name"
-                  icon={user}
-                  placeholder="Digite seu nome de usuário..."
-                  type="text"
-                />
+              <div className="w-full flex flex-col px-16 gap-10 mt-16">
+                <div>
+                  <label htmlFor="name" className="text-[15px] text-iflab_gray">
+                    Nome de usuário
+                  </label>
+                  <Text_Input
+                    id="name"
+                    icon={user}
+                    placeholder="Digite seu nome de usuário..."
+                    type="text"
+                  />
+                </div>
 
-                <Text_Input
-                  id="email"
-                  icon={email}
-                  placeholder="Digite seu email..."
-                  type="email"
-                />
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="text-[15px] text-iflab_gray"
+                  >
+                    Email
+                  </label>
+                  <Text_Input
+                    id="email"
+                    icon={email}
+                    placeholder="Digite seu email..."
+                    type="email"
+                  />
+                </div>
 
-                <Password_Input
-                  id="password"
-                  placeholder="Digite sua senha..."
-                />
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="text-[15px] text-iflab_gray"
+                  >
+                    Senha
+                  </label>
+                  <Password_Input
+                    id="password"
+                    placeholder="Digite sua senha..."
+                  />
+                </div>
 
-                <Password_Input
-                  id="password_confirm"
-                  placeholder="Confirme sua senha..."
-                />
+                <div>
+                  <label
+                    htmlFor="confirm_password"
+                    className="text-[15px] text-iflab_gray"
+                  >
+                    Confirmar senha
+                  </label>
+                  <Password_Input
+                    id="confirm_password"
+                    placeholder="Digite sua senha novamente..."
+                  />
+                </div>
 
-                <div className="w-full flex gap-5 justify-center">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      name="user_type"
-                      id="professor"
-                      className="mr-2 accent-iflab_green cursor-pointer"
-                    />
-                    <label htmlFor="professor">Sou professor</label>
-                  </div>
+                <div>
+                  <label
+                    htmlFor="user_type"
+                    className="text-[15px] text-iflab_gray"
+                  >
+                    Tipo de usuário
+                  </label>
+                  <div className="w-full flex gap-5 mt-2 ml-3">
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="user_type"
+                        id="professor"
+                        className="mr-2 accent-iflab_green cursor-pointer"
+                      />
+                      <label htmlFor="professor" className="text-iflab_gray">
+                        Sou professor
+                      </label>
+                    </div>
 
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      name="user_type"
-                      id="aluno"
-                      className="mr-2 accent-iflab_green cursor-pointer"
-                    />
-                    <label htmlFor="aluno">Sou aluno</label>
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="user_type"
+                        id="aluno"
+                        className="mr-2 accent-iflab_green cursor-pointer"
+                      />
+                      <label htmlFor="aluno" className="text-iflab_gray">
+                        Sou aluno
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="w-full h-full flex justify-center items-center">
+              <div className="w-full px-16 pt-10 flex justify-between items-center">
+                <Tertiary_button text="Já tenho uma conta" />
                 <Primary_button text="Registrar-se" />
               </div>
 
-              <div className="px-6 flex text-iflab_gray_light w-full justify-center items-end pb-3">
+              <div className="px-6 flex text-iflab_gray_light w-full h-full justify-center items-end pb-3">
                 <p className="text-sm">
                   Ao se registrar, você confirmará que leu os{" "}
                   <a
@@ -131,28 +174,49 @@ function Sign() {
           {/* Login */}
           {!isInRegister && (
             <form action="" className="w-full h-full flex flex-col">
-              <div className="w-full flex flex-col px-16 pt-16 gap-10">
-                <Text_Input
-                  id="user"
-                  icon={user}
-                  placeholder="Digite seu nome de usuário..."
-                  type="user"
-                />
+              <div className="w-full flex flex-col px-16 gap-10 mt-16">
+                <div>
+                  <label htmlFor="user" className="text-[15px] text-iflab_gray">
+                    Nome de usuário
+                  </label>
+                  <Text_Input
+                    id="user"
+                    icon={user}
+                    placeholder="Digite seu nome de usuário..."
+                    type="user"
+                  />
+                </div>
 
-                <Password_Input
-                  id="password"
-                  placeholder="Digite sua senha..."
-                />
+                <div>
+                  <label
+                    htmlFor="senha"
+                    className="text-[15px] text-iflab_gray"
+                  >
+                    senha
+                  </label>
+                  <Password_Input
+                    id="password"
+                    placeholder="Digite sua senha..."
+                  />
+                  <p className="text-iflab_gray text-end mt-2 text-[12px]">
+                    Esqueceu a sua senha?{" "}
+                    <a href="/" className="text-iflab_green_light">
+                      clique aqui!
+                    </a>
+                  </p>
+                </div>
               </div>
-              <div className="w-full h-full flex justify-center items-center">
-                <Primary_button text="Entrar" />
+              <div className="w-full px-16 pt-10 flex justify-between items-center">
+                <Tertiary_button text="Criar uma conta" />
+                <Primary_button text="Fazer Login" />
               </div>
 
-              <div className="px-6 flex text-iflab_gray_light w-full justify-center items-end pb-3">
+              <div className="px-6 flex text-iflab_gray_light w-full h-full justify-center items-end p-3 mt-16">
                 <p className="text-sm">
-                  Ao se registrar, você confirmará que leu os{" "}
+                  Ao logar, você confirma que leu os{" "}
                   <a
-                    href="/"
+                    href="/#/home"
+                    /* target="_blank" */
                     className="text-iflab_green_light font-normal hover:text-iflab_green_dark duration-75"
                   >
                     termos de uso
