@@ -12,19 +12,19 @@ function Password_Input({ placeholder, alt }) {
       <div className="w-full flex border-b-2 border-b-iflab_gray_light hover:border-b-iflab_green_light duration-75">
         <input
           type={showPassword ? "text" : "password"}
-          className="w-full bg-gray-200 p-2 outline-none"
+          className="w-full p-2 outline-none"
           placeholder={placeholder ? placeholder : "Digite sua senha..."}
         />
-        <button
+        <div
+          className="right-0 outline-none w-[39px]"
           onClick={() => setShowPassword(!showPassword)}
-          className="bg-gray-200 right-0 outline-none"
         >
           <img
             src={showPassword ? show : hide}
             alt={alt ? alt : "Visibilidade da senha"}
-            className="h-5 w-5 m-2 select-none"
+            className="h-5 w-5 m-2 select-none cursor-pointer"
           />
-        </button>
+        </div>
       </div>
     </>
   );

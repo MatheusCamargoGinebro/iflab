@@ -28,12 +28,12 @@ function Sign() {
           </h1>
         </div>
       </div>
-      <div className="bg-iflab_white h-screen w-[30%] shadow-sm">
+      <div className="bg-iflab_white h-screen max-h-[1080px] min-w-[556px] w-[30%] shadow-sm">
         <div className="flex justify-center items-center w-full h-[25%]">
           <img src={logo} alt="iflab" className="h-[120px] select-none" />
         </div>
 
-        <div className="w-full h-[75%]flex flex-col">
+        <div className="w-full h-[75%] flex flex-col">
           <div className="w-full">
             <button
               id="register"
@@ -61,63 +61,107 @@ function Sign() {
 
           {/* Register */}
           {isInRegister && (
-            <div className="w-full h-[100%] flex flex-col items-center p-10 pt-16">
-              <form action="" className="w-[85%]">
-                <div className="mb-10 mt-8">
-                  <Text_Input
-                    placeholder="Digite seu nome de usuário..."
-                    icon={user}
-                    alt="Nome de usuário."
-                  />
-                </div>
-                <div className="mb-10">
-                  <Text_Input
-                    placeholder="Digite seu email..."
-                    icon={email}
-                    alt="Email."
-                  />
-                </div>
-                <div className="mb-10">
-                  <Password_Input
-                    placeholder="Digite sua senha..."
-                    alt="Visibilidade da senha."
-                  />
-                </div>
-                <div className="mb-10">
-                  <Password_Input
-                    placeholder="Confirme sua senha..."
-                    alt="Visibilidade da confirmação de senha."
-                  />
-                </div>
-                <div className="flex justify-around px-16 py-8">
-                  <div>
+            <form action="" className="w-full h-full flex flex-col">
+              <div className="w-full flex flex-col px-16 pt-16 gap-10">
+                <Text_Input
+                  id="name"
+                  icon={user}
+                  placeholder="Digite seu nome de usuário..."
+                  type="text"
+                />
+
+                <Text_Input
+                  id="email"
+                  icon={email}
+                  placeholder="Digite seu email..."
+                  type="email"
+                />
+
+                <Password_Input
+                  id="password"
+                  placeholder="Digite sua senha..."
+                />
+
+                <Password_Input
+                  id="password_confirm"
+                  placeholder="Confirme sua senha..."
+                />
+
+                <div className="w-full flex gap-5 justify-center">
+                  <div className="flex items-center">
                     <input
                       type="radio"
+                      name="user_type"
                       id="professor"
-                      name="userType"
-                      value="professor"
-                      className=""
+                      className="mr-2 accent-iflab_green cursor-pointer"
                     />
-                    <label htmlFor="professor">Professor</label>
+                    <label htmlFor="professor">Sou professor</label>
                   </div>
-                  <div>
+
+                  <div className="flex items-center">
                     <input
                       type="radio"
-                      id="student"
-                      name="userType"
-                      value="student"
+                      name="user_type"
+                      id="aluno"
+                      className="mr-2 accent-iflab_green cursor-pointer"
                     />
-                    <label htmlFor="student">Aluno</label>
+                    <label htmlFor="aluno">Sou aluno</label>
                   </div>
                 </div>
-                <div className="flex justify-center">
-                  <Primary_button text="Registrar-se" />
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="w-full h-full flex justify-center items-center">
+                <Primary_button text="Registrar-se" />
+              </div>
+
+              <div className="px-6 flex text-iflab_gray_light w-full justify-center items-end pb-3">
+                <p className="text-sm">
+                  Ao se registrar, você confirmará que leu os{" "}
+                  <a
+                    href="/"
+                    className="text-iflab_green_light font-normal hover:text-iflab_green_dark duration-75"
+                  >
+                    termos de uso
+                  </a>{" "}
+                  do aplicativo.
+                </p>
+              </div>
+            </form>
           )}
 
           {/* Login */}
+          {!isInRegister && (
+            <form action="" className="w-full h-full flex flex-col">
+              <div className="w-full flex flex-col px-16 pt-16 gap-10">
+                <Text_Input
+                  id="user"
+                  icon={user}
+                  placeholder="Digite seu nome de usuário..."
+                  type="user"
+                />
+
+                <Password_Input
+                  id="password"
+                  placeholder="Digite sua senha..."
+                />
+              </div>
+              <div className="w-full h-full flex justify-center items-center">
+                <Primary_button text="Entrar" />
+              </div>
+
+              <div className="px-6 flex text-iflab_gray_light w-full justify-center items-end pb-3">
+                <p className="text-sm">
+                  Ao se registrar, você confirmará que leu os{" "}
+                  <a
+                    href="/"
+                    className="text-iflab_green_light font-normal hover:text-iflab_green_dark duration-75"
+                  >
+                    termos de uso
+                  </a>{" "}
+                  do aplicativo.
+                </p>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </div>

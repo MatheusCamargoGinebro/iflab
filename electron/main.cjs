@@ -4,7 +4,7 @@ function createWindow() {
   const win = new BrowserWindow({
     title: "IFLab",
     minWidth: 1280,
-    minHeight: 720,
+    minHeight: 850,
     autoHideMenuBar: true,
     icon: "./src/assets/icons/iflab/icon-512.png",
     webPreferences: {
