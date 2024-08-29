@@ -11,32 +11,16 @@ import Tertiary_button from "../../components/buttons/Tertiary_button";
 
 import user from "../../assets/icons/UI/user.png";
 import email from "../../assets/icons/UI/email.png";
+import Card from "../../components/card/Card";
 
 function NotFound() {
   return (
     <>
       <Header />
-      <div className="bg-iflab_white_light w-screen h-screen flex justify-center items-center flex-col">
-        <div className="bg-slate-100 p-5 w-[32rem]">
-          <Text_Input
-            placeholder="Digite seu nome..."
-            icon={user}
-            alt="usuário"
-          />
-          <Text_Input
-            placeholder="Digite seu email..."
-            icon={email}
-            alt="email"
-          />
-          <Password_Input />
-        </div>
+      <div className="h-24">
 
-        <div className=" w-full flex justify-center gap-10">
-          <Primary_button text="Enviar" />
-          <Secundary_button text="Cancelar" />
-          <Tertiary_button text="Voltar" />
-        </div>
       </div>
+      <Card titulo={"Ola tudo bem"} usuarioAtual={"pa"} dataInicio={"ola"} dataFim={"ola"} status={"ola"}/>
     </>
   );
 }
