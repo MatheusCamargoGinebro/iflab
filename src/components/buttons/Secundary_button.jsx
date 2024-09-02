@@ -3,7 +3,7 @@ function Secundary_button({ text, onClick }) {
       <>
         <button
           onClick={onClick}
-          className="min-w-24 bg-iflab_white text-iflab_green border-2 border-iflab_green p-2 rounded-md hover:border-iflab_green_light hover:text-iflab_green_light duration-75"
+          className="min-w-24 text-iflab_green border-2 border-iflab_green p-2 rounded-md hover:border-iflab_green_light hover:text-iflab_green_light duration-75"
         >
           {text}
         </button>
