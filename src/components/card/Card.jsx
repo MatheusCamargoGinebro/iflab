@@ -8,6 +8,7 @@ import potion from "../../assets/icons/UI/potion.png";
 import access_management from "../../assets/icons/UI/access-management.png";
 import inventory_relatory from "../../assets/icons/UI/inventory-relatory.png";
 import access_relatory from "../../assets/icons/UI/access-relatory.png";
+import schedule from "../../assets/icons/UI/schedule.png";
 
 import Primary_button from "../buttons/Primary_button";
 import Secundary_button from "../buttons/Secundary_button";
@@ -96,12 +97,15 @@ function Card({ titulo, usuarioAtual, dataInicio, dataFim, status }) {
               ) : (
                 <div className="">
                   <div className="p-5 border-b border-iflab_gray_light">
-                    <div className="">
+                    <div className="flex justify-between">
                       <h1 className="font-bold text-iflab_gray_dark text-xl">
                         Dados da sessão atual
                       </h1>
+                      <button className="pr-5 flex gap-2">
+                        <h1 className="text-iflab_green_light underline hover:text-iflab_green duration-75">Marcar sessão</h1><img className="h-[24px]" src={schedule} alt="Marcar sessão"/>
+                      </button>
                     </div>
-                    <div className="px-5 pt-4">
+                    <div className="px-5 pt-4 justify-between">
                       <div className="text-iflab_gray font-bold gap-2 flex flex-col">
                         <h1>
                           Usuário atual: {usuarioAtual ? usuarioAtual : "--"}
@@ -114,7 +118,17 @@ function Card({ titulo, usuarioAtual, dataInicio, dataFim, status }) {
                           Data de término da sessão: {dataFim ? dataFim : "--"}
                         </h1>
                       </div>
-                      <div></div>
+                      <div className="flex items-end pt-5 w-full justify-end">
+                        {status ? (
+                          <Primary_button
+                            text="Reservar sessão"                          
+                          />
+                        ) : (
+                          <Secundary_button
+                            text="Finalizar sessão"
+                          />
+                        )} 
+                      </div>
                     </div>
                   </div>
                   <div>
@@ -123,7 +137,7 @@ function Card({ titulo, usuarioAtual, dataInicio, dataFim, status }) {
                         Informações sobre o laboratório
                       </h1>
                     </div>
-                    <div className="p-5 flex gap-5">
+                    <div className="p-16 gap-10 grid grid-cols-2">
                       <div
                         onClick={() => {}}
                         className="w-[270px] h-[96px] flex items-center justify-center border border-iflab_gray_light bg-iflab_white_dark py-3 px-7 gap-2 rounded-lg hover:cursor-pointer hover:bg-iflab_white_light duration-75"
@@ -144,7 +158,7 @@ function Card({ titulo, usuarioAtual, dataInicio, dataFim, status }) {
                       >
                         <img
                           src={access_management}
-                          alt="Relatório de acesso"
+                          alt="Gerenciamento de acesso"
                           className="h-[65px]"
                         />{" "}
                         <h1 className="text-center">
@@ -152,7 +166,33 @@ function Card({ titulo, usuarioAtual, dataInicio, dataFim, status }) {
                         </h1>
                       </div>
 
+                      <div
+                        onClick={() => {}}
+                        className="w-[270px] h-[96px] flex items-center justify-center border border-iflab_gray_light bg-iflab_white_dark py-3 px-7 gap-2 rounded-lg hover:cursor-pointer hover:bg-iflab_white_light duration-75"
+                      >
+                        <img
+                          src={inventory_relatory}
+                          alt="Relatório de inventário"
+                          className="h-[65px]"
+                        />{" "}
+                        <h1 className="text-center">
+                          Gerar relatório do inventário
+                        </h1>
+                      </div>
 
+                      <div
+                        onClick={() => {}}
+                        className="w-[270px] h-[96px] flex items-center justify-center border border-iflab_gray_light bg-iflab_white_dark py-3 px-7 gap-2 rounded-lg hover:cursor-pointer hover:bg-iflab_white_light duration-75"
+                      >
+                        <img
+                          src={access_relatory}
+                          alt="Relatório de acesso"
+                          className="h-[65px]"
+                        />{" "}
+                        <h1 className="text-center">
+                          Gerar relatório de acessos
+                        </h1>
+                      </div>
                     </div>
                   </div>
                 </div>
