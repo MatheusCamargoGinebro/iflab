@@ -1,11 +1,14 @@
 function AccessManager() {
   return (
     <>
-    AccessManager
+      AccessManager
       <div className="fixed bottom-3 right-3 shadow-md rounded-lg bg-iflab_white_light p-5">
         <ul>
           <li>
-            <a href="./#">Sign</a>
+            <a href="./#/login">Login</a>
+          </li>
+          <li>
+            <a href="./#/register">Register</a>
           </li>
           <li>
             <a href="./#/Home">Home</a>

@@ -3,7 +3,7 @@ function TButton({ text, onClick, submit }) {
       <>
         <button
           onClick={onClick}
-          type={submit === true ? "submit" : "button"}
+          type="button"
           className="text-iflab_green font-medium hover:text-iflab_green_light underline duration-75"
         >
           {text}
