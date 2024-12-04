@@ -3,8 +3,7 @@ function login(email, password) {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_email: email, user_password: password }),
-    mode: "cors",
+    body: JSON.stringify({ user_email: email, user_password: password })
   };
 
   fetch("http://localhost:3333/user/login", options)
@@ -12,7 +11,7 @@ function login(email, password) {
       console.log("resposta:\n", response);
     })
     .catch((err) => {
-      console.error("erro:\n",err);
+      console.error(err);
     });
 }
 

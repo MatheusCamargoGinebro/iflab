@@ -1,8 +1,8 @@
-// importando funções de requisicão da API:
-import { login } from "../../api/userAuth";
-
 // importando hooks do React:
 import { useState } from "react";
+
+// importando funções de requisicão da API:
+import { login } from "../../api/userAuth";
 
 // importando componentes de inputs e botões:
 import TextInput from "../../components/inputs/textInput";
