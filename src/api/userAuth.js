@@ -4,14 +4,16 @@ function login(email, password) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ user_email: email, user_password: password }),
+    mode: "cors",
   };
 
   fetch("http://localhost:3333/user/login", options)
-    .then((response) => response.json())
-    .then((response) => console.log(response))
-    .catch((err) => console.error(err));
-
-  return;
+    .then((response) => {
+      console.log("resposta:\n", response);
+    })
+    .catch((err) => {
+      console.error("erro:\n",err);
+    });
 }
 
 // Função para pegar os dados do usuário:
