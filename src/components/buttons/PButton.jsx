@@ -1,11 +1,11 @@
-function PButton({ text, onClick }) {
+function PButton({ text, onClick, disabled }) {
   return (
     <>
       <button
         onClick={onClick}
         type="button"
-        className="bg-iflab_green text-iflab_white py-2 px-6 min-w-32 rounded-md hover:bg-iflab_green_light duration-75 "
-      >
+        className={`py-2 px-6 min-w-32 rounded-md duration-75 ${disabled ? "bg-iflab_white_dark text-iflab_gray_light hover:bg-iflab_white_light" : "bg-iflab_green text-iflab_white hover:bg-iflab_green_light cursor-pointer"}`}
+        disabled={disabled}>
         {text}
       </button>
     </>

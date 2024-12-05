@@ -3,12 +3,12 @@ function login(email, password) {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_email: email, user_password: password })
+    body: JSON.stringify({ user_email: email, user_password: password }),
   };
 
   fetch("http://localhost:3333/user/login", options)
     .then((response) => {
-      console.log("resposta:\n", response);
+      return response.json();
     })
     .catch((err) => {
       console.error(err);
