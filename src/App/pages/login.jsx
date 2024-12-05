@@ -129,7 +129,7 @@ function Login() {
               login(userData.email, userData.password).then((response) => {
                 if (response.status || response.auth) {
                   // Logou
-
+                    window.location.href = "#/home";
                 } else {
                   // Erro
                   setError({ status: true, message: response.error_at !== "user_password" ? response.message : "usuário ou senha inválidos!" });
