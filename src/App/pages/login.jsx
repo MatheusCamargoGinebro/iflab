@@ -139,7 +139,7 @@ function Login() {
         </div>
       </form>
       {error.status ? (
-        <div className="bg-iflab_gray_light bg-opacity-50 w-screen h-screen fixed flex justify-center items-center z-50">
+        <div className="bg-iflab_gray_light bg-opacity-50 w-screen h-screen fixed flex justify-center items-center z-50 backdrop-blur-sm">
           <div className="bg-iflab_white rounded-md w-[30rem] shadow-xl p-5">
             <div className="flex justify-center mb-5">
               <h1 className="text-2xl">Houve um erro...</h1>
