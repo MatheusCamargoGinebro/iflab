@@ -16,7 +16,16 @@ function login(email, password) {
 }
 
 // Função para pegar os dados do usuário:
-function getUserData(token) {
+function checktoken() {
+  // Coletando o token do localStorage:
+  const token = localStorage.getItem("token");
+
+  // Verificando se o token existe:
+  if (!token) {
+    return false;
+  }
+
+  // Verificando se o token é válido:
   const options = {
     method: "GET",
     headers: {
@@ -25,10 +34,14 @@ function getUserData(token) {
   };
 
   fetch("http://localhost:3333/user/data", options)
-    .then((response) => response.json())
-    .then((response) => console.log(response))
-    .catch((err) => console.error(err));
+    .then((response) => {
+      return false;
+    }).catch
+    ((err) => {
+      console.error(err);
+      return false;
+    });
 }
 
 // exportando as funções:
-export { login, getUserData };
+export { login, checktoken };

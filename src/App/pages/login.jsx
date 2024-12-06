@@ -119,7 +119,7 @@ function Login() {
           <TButton
             text='Registrar uma nova conta'
             onClick={() => {
-              window.location.href = "#/register";
+              window.location.href = "/register";
             }} />
 
           <PButton
