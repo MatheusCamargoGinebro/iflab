@@ -16,30 +16,26 @@ import AccessManager from './App/pages/accessmanager'
 // Router:
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
-// Usefull functions:
+// functions:
 import { checktoken } from './api/userAuth'
+
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
-    errorElement: <div className='h-screen w-screen flex justify-center items-center'><h1 className='font-bold shadow-2xl'>Error 404! ¯\_(ツ)_/¯</h1></div>,
+    errorElement: <Navigate to='/home' />,
     children: [
       {
         path: '/inventory/:id',
-        element: (checktoken() ? <Inventory /> : <Navigate to='/login' />),
+        element: await checktoken() ? <Inventory /> : <Navigate to='/login' />,
       },
       {
         path: '/accessmanager/:id',
-        element: <AccessManager />,
+        element: await checktoken() ? <AccessManager /> : <Navigate to='/login' />,
       },
       {
-        path: '/Home',
-        element: <Home />,
-      },
-      {
-        path: '/',
-        element: <Home />,
+        path: '/home',
+        element: await checktoken() ? <Home /> : <Navigate to='/login' />,
       }
     ],
   },
