@@ -17,6 +17,7 @@ import { loginUser } from "../../api/userAuth";
 
 // Função de login:
 function Login() {
+
   /*---------------------------------------------------------------*/
 
   // States:
@@ -38,7 +39,6 @@ function Login() {
   /*---------------------------------------------------------------*/
 
   // Funções de validação de inputs:
-
   // Email:
   function handleMailType(e) {
     if (
