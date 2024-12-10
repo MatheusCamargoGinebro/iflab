@@ -95,9 +95,7 @@ function Login() {
       <form className='px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md'>
 
         <div className='flex justify-center'>
-
           <h1 className='text-2xl'>Logar no <span className='font-bold text-iflab_green_light'>IFLab</span></h1>
-
         </div>
 
         <div className='flex flex-col gap-5 pb-10 py-10'>

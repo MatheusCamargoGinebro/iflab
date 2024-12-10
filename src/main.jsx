@@ -36,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/home',
         element: await checktoken() ? <Home /> : <Navigate to='/login' />,
+      },
+      {
+        path: '',
+        element: <Navigate to='/home' />,
       }
     ],
   },
