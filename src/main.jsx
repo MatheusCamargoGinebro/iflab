@@ -17,7 +17,7 @@ import AccessManager from './App/pages/accessmanager'
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 // functions:
-import { checktoken } from './api/userAuth'
+import { checktoken } from './api/requests'
 
 
 const router = createBrowserRouter([

@@ -15,6 +15,9 @@ import potion from "../../assets/icons/UI/potion.png";
 import type_professor from "../../assets/icons/UI/teacher.png";
 import type_student from "../../assets/icons/UI/student.png";
 
+// Importando requisições da API:
+import { sendMailCode, registerUser, loginUser } from "../../api/requests";
+
 /* O=============================================================================================O */
 
 function Register() {
@@ -30,13 +33,6 @@ function Register() {
     user_campusId: false,
   });
 
-  const [steps, setSteps] = useState({
-    InformMail: false,
-    ConfirmMail: false,
-    InformUserData: false,
-    InformCampusData: false,
-  });
-
   const [userData, setUserData] = useState({
     validationCode: "",
     user_email: "",
@@ -46,14 +42,35 @@ function Register() {
     user_campusId: 0,
   });
 
-  const [error, setError] = useState({
-    validationCode: "",
-    user_email: "",
+  const [dataToSend, setDataToSend] = useState({
     user_name: "",
+    user_email: "",
     user_password: "",
-    user_password_confirm: "",
-    user_type: "",
-    user_campusId: "",
+    user_type: 0,
+    user_campusId: 0,
+    validationCode: "",
+  });
+
+  const [steps, setSteps] = useState({
+    InformMail: false,
+    ConfirmMail: false,
+    InformUserData: false,
+    InformCampusData: false,
+  });
+
+  const [error, setError] = useState({
+    validationCode: "Alright",
+    user_email: "Alright",
+    user_name: "Alright",
+    user_password: "Alright",
+    user_password_confirm: "Alright",
+    user_type: "Alright",
+    user_campusId: "Alright",
+  });
+
+  const [errorWindow, setErrorWindow] = useState({
+    status: false,
+    message: "",
   });
 
   /*---------------------------------------------------------------*/
@@ -72,7 +89,7 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_email: "_" });
+    setError({ ...error, user_email: "Alright" });
     setcheckData({ ...checkData, user_email: true });
     return;
   }
@@ -80,13 +97,13 @@ function Register() {
   function handleValidationCodeType(e) {
     setUserData({ ...userData, validationCode: e.target.value });
 
-    if (e.target.value.length !== 5) {
+    if (e.target.value.length !== 6) {
       setError({ ...error, validationCode: "Código de validação inválido!" });
       setcheckData({ ...checkData, validationCode: false });
       return;
     }
 
-    setError({ ...error, validationCode: "_" });
+    setError({ ...error, validationCode: "Alright" });
     setcheckData({ ...checkData, validationCode: true });
     return;
   }
@@ -109,7 +126,7 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_name: "_" });
+    setError({ ...error, user_name: "Alright" });
     setcheckData({ ...checkData, user_name: true });
     return;
   }
@@ -159,7 +176,7 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_password: "_" });
+    setError({ ...error, user_password: "Alright" });
     setcheckData({ ...checkData, user_password: true });
     return;
   }
@@ -171,7 +188,7 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_password_confirm: "_" });
+    setError({ ...error, user_password_confirm: "Alright" });
     setcheckData({ ...checkData, user_password_confirm: true });
     return;
   }
@@ -189,7 +206,7 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_type: "_" });
+    setError({ ...error, user_type: "Alright" });
     setcheckData({ ...checkData, user_type: true });
     return;
   }
@@ -203,8 +220,83 @@ function Register() {
       return;
     }
 
-    setError({ ...error, user_campusId: "_" });
+    setError({ ...error, user_campusId: "Alright" });
     setcheckData({ ...checkData, user_campusId: true });
+    return;
+  }
+
+  /*---------------------------------------------------------------*/
+
+  async function handleSendMail() {
+    if (!checkData.user_email) {
+      setErrorWindow({
+        status: true,
+        message: "Email fornecido é inválido!",
+      });
+      return;
+    }
+
+    const result = await sendMailCode(userData.user_email);
+
+    if (result.status === false) {
+      setErrorWindow({
+        status: true,
+        message: result.message,
+      });
+      return;
+    }
+
+    setSteps({ ...steps, InformMail: true });
+
+    setDataToSend({
+      ...dataToSend,
+      user_email: userData.user_email,
+    });
+
+    return;
+  }
+
+  async function handleRegister() {
+    if (
+      !checkData.user_name ||
+      !checkData.user_password ||
+      !checkData.user_password_confirm ||
+      !checkData.user_type ||
+      !checkData.user_campusId ||
+      !checkData.validationCode
+    ) {
+      setErrorWindow({
+        status: true,
+        message: "Houve um erro ao preencher os campos!",
+      });
+      return;
+    }
+
+    const result = await registerUser(dataToSend);
+
+    if (result.status === false) {
+      setErrorWindow({
+        status: true,
+        message: result.message,
+      });
+      return;
+    }
+
+    const loginResult = await loginUser({
+      user_email: dataToSend.user_email,
+      user_password: dataToSend.user_password,
+    });
+
+    if (loginResult.status === false) {
+      setErrorWindow({
+        status: true,
+        message: loginResult.message,
+      });
+      return;
+    }
+
+    window.location.href = "/home";
+
     return;
   }
 
@@ -213,11 +305,10 @@ function Register() {
   return (
     <div className="h-screen w-screen bg-iflab_white_dark flex justify-center items-center">
       <form className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md">
-        {/* Formulário progride conforme os steps avançam */}
         {!steps.InformMail && (
           <div>
-            <div className="flex justify-center">
-              <h1 className="text-2xl">registrar um novo usuário</h1>
+            <div className="flex justify-center pb-10">
+              <h1 className="text-2xl">Registrar um novo usuário</h1>
             </div>
 
             <div>
@@ -226,14 +317,186 @@ function Register() {
                 placeholder="Email"
                 type="email"
                 onChange={(e) => handleMailType(e)}
-                state={checkData.user_email}
+                state={checkData.user_email || userData.user_email.length === 0}
                 errorMessage={error.user_email}
               />
-              {checkData.user_email ? "true" : "false"}
+            </div>
+            <div className="flex justify-between pt-5">
+              <div className="flex items-end">
+                <h1>
+                  Já possui uma conta?{" "}
+                  <TButton
+                    text="Logar"
+                    onClick={() => (window.location.href = "/login")}
+                  />
+                </h1>
+              </div>
+              <PButton
+                text="Continuar"
+                disabled={!checkData.user_email}
+                onClick={() => handleSendMail()}
+              />
+            </div>
+          </div>
+        )}
+
+        {steps.InformMail && !steps.ConfirmMail && (
+          <div>
+            <div className="flex justify-center pb-5">
+              <h1 className="text-2xl">Registrar um novo usuário</h1>
+            </div>
+
+            <div className="flex justify-center text-center rounded-md bg-iflab_white_dark p-2 mb-10">
+              <h1>
+                Um código foi enviado para <br />
+                <span className="text-iflab_green font-bold">
+                  {userData.user_email}
+                </span>
+              </h1>
+            </div>
+
+            <div>
+              <TextInput
+                icon={potion}
+                placeholder="Código de validação"
+                type="text"
+                onChange={(e) => handleValidationCodeType(e)}
+                state={
+                  checkData.validationCode ||
+                  userData.validationCode.length === 0
+                }
+                errorMessage={error.validationCode}
+              />
+            </div>
+            <div className="flex justify-between pt-5">
+              <div className="flex items-end">
+                <h1>
+                  Já possui uma conta?{" "}
+                  <TButton
+                    text="Logar"
+                    onClick={() => (window.location.href = "/login")}
+                  />
+                </h1>
+              </div>
+              <PButton
+                text="Continuar"
+                disabled={!checkData.validationCode}
+                onClick={() => {
+                  if (checkData.validationCode) {
+                    setSteps({ ...steps, ConfirmMail: true });
+
+                    setDataToSend({
+                      ...dataToSend,
+                      validationCode: userData.validationCode,
+                    });
+                  }
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {steps.ConfirmMail && steps.InformMail && !steps.InformUserData && (
+          <div>
+            <div className="flex justify-center pb-5">
+              <h1 className="text-2xl">Registrar um novo usuário</h1>
+            </div>
+            <div>
+              <div>
+                <TextInput
+                  icon={user}
+                  placeholder="Digite seu nome de usuário..."
+                  type="text"
+                  onChange={(e) => handleNameType(e)}
+                  state={checkData.user_name || userData.user_name.length === 0}
+                  errorMessage={error.user_name}
+                />
+              </div>
+              <div>
+                <TextInput
+                  placeholder="Digite sua senha..."
+                  type="password"
+                  onChange={(e) => handlePasswordType(e)}
+                  state={
+                    checkData.user_password ||
+                    userData.user_password.length === 0
+                  }
+                  errorMessage={error.user_password}
+                />
+              </div>
+              <div>
+                <TextInput
+                  placeholder="Confirme sua senha..."
+                  type="password"
+                  onChange={(e) => handlePasswordConfirmType(e)}
+                  state={
+                    checkData.user_password_confirm ||
+                    userData.user_password.length === 0
+                  }
+                  errorMessage={error.user_password_confirm}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between pt-5">
+              <div className="flex items-end">
+                <h1>
+                  Já possui uma conta?{" "}
+                  <TButton
+                    text="Logar"
+                    onClick={() => (window.location.href = "/login")}
+                  />
+                </h1>
+              </div>
+              <PButton
+                text="Continuar"
+                disabled={
+                  !checkData.user_name ||
+                  !checkData.user_password ||
+                  !checkData.user_password_confirm
+                }
+                onClick={() => {
+                  if (
+                    checkData.user_name &&
+                    checkData.user_password &&
+                    checkData.user_password_confirm
+                  ) {
+                    setSteps({ ...steps, InformUserData: true });
+
+                    setDataToSend({
+                      ...dataToSend,
+                      user_name: userData.user_name,
+                      user_password: userData.user_password,
+                    });
+                  }
+                }}
+              />
             </div>
           </div>
         )}
       </form>
+
+      {errorWindow.status ? (
+        <div className="bg-iflab_gray_light bg-opacity-50 w-screen h-screen fixed flex justify-center items-center z-50 backdrop-blur-sm">
+          <div className="bg-iflab_white rounded-md w-[30rem] shadow-xl p-5">
+            <div className="flex justify-center mb-5">
+              <h1 className="text-2xl">Houve um erro...</h1>
+            </div>
+            <div>
+              <p className="text-justify flex justify-center items-center p-5 min-h-[5rem] bg-iflab_white_dark rounded-sm w-full h-full">
+                {errorWindow.message}
+              </p>
+            </div>
+            <div className="flex justify-center pt-5 bottom-0 left-0 w-full">
+              <PButton
+                text="Tentar novamente"
+                onClick={() =>
+                  setErrorWindow({ ...errorWindow, status: false })
+                }
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
