@@ -96,7 +96,10 @@ function Login() {
   // Renderização:
   return (
     <div className="h-screen w-screen bg-iflab_white_dark flex justify-center items-center">
-      <form className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md">
+      <form
+        className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <div className="flex justify-center">
           <h1 className="text-2xl">
             Logar no{" "}
