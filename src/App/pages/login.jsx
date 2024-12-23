@@ -58,7 +58,7 @@ function Login() {
   function handlePasswordType(e) {
     setUserData({ ...userData, password: e.target.value });
 
-    if (e.target.value.length < 0) {
+    if (e.target.value.length <= 0) {
       setcheckData({ ...checkData, password: false });
     } else {
       setcheckData({ ...checkData, password: true });
@@ -109,13 +109,8 @@ function Login() {
 
         <div className="flex flex-col gap-5 pb-10 py-10">
           <div className="group flex flex-col gap-2">
-            <label
-              htmlFor="email-input"
-              className="text-iflab_gray group-hover:text-iflab_gray_dark"
-            >
-              Email
-            </label>
             <TextInput
+              predata={userData.email}
               label="Email"
               type="email"
               name={"email-input"}
@@ -128,14 +123,8 @@ function Login() {
           </div>
 
           <div className="group flex flex-col gap-2">
-            <label
-              htmlFor="password-input"
-              className="text-iflab_gray group-hover:text-iflab_gray_dark"
-            >
-              {" "}
-              Senha{" "}
-            </label>
             <TextInput
+              predata={userData.password}
               label="Senha"
               type="password"
               name={"password-input"}
@@ -147,16 +136,23 @@ function Login() {
           </div>
         </div>
 
-        <div className="flex justify-between items-end gap-5">
-          <TButton
-            text="Registrar uma nova conta"
-            onClick={() => {
-              window.location.href = "/register";
-            }}
-          />
+        <div className="flex justify-between items-center gap-5">
+          <div className="flex gap-1 items-center">
+            <h1>Sem conta?</h1>
+            <TButton
+              text="Registre-se"
+              onClick={() => {
+                window.location.href = "/register";
+              }}
+            />
+          </div>
           <PButton
             text="Fazer login"
-            disabled={!(checkData.email && checkData.password)}
+            disabled={
+              checkData.email === false || checkData.password === false
+                ? true
+                : false
+            }
             onClick={(e) => handleLogin(e)}
           />
         </div>

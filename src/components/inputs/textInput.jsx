@@ -6,19 +6,29 @@ import hideIcon from "../../assets/icons/UI/hide.png";
 
 // Input que pode ser de diferentes tipos.
 // Se for do tipo senha, ele pode ser ocultado ou exibido.
-function TextInput({
-  placeholder,
-  icon,
-  type,
-  name,
-  onChange,
-  state,
-  errorMessage,
-}) {
+function TextInput({ icon, type, name, label, onChange, state, errorMessage, predata }) {
   const [showPassword, setShowPassword] = useState(false);
 
+  const [value, setValue] = useState("");
+
+  function handleOnChange(e) {
+    onChange(e);
+    setValue(e.target.value);
+  }
+
   return (
-    <>
+    <div className="group">
+      <label
+        htmlFor={name ? name : "input"}
+        className={`relative duration-75${
+          // Se o input estiver preenchido, ele sobe.
+          value.length > 0  || predata.length > 0
+            ? " top-0 left-0"
+            : " top-8 left-3 group-hover:left-4 text-iflab_gray"
+        }`}
+      >
+        {label ? label + (value.length > 0 ? ":" : "") : "Insira informação"}
+      </label>
       <div
         className={`group w-full flex border-b-2 rounded-sm bg-iflab_white hover:bg-iflab_white_light duration-75 border-b-iflab_gray_light ${
           state
@@ -31,9 +41,9 @@ function TextInput({
             type === "password" ? (showPassword ? "text" : "password") : type
           }
           className="z-10 w-full p-2 outline-none bg-opacity-0 bg-iflab_white group-hover:pl-3 group-focus-within:pl-3 duration-75"
-          placeholder={placeholder ? placeholder : "Digite aqui..."}
           name={name ? name : "input"}
-          onChange={onChange}
+          onChange={handleOnChange}
+          value={predata}
         ></input>
         {type === "password" ? (
           <div
@@ -42,7 +52,7 @@ function TextInput({
           >
             <img
               src={showPassword ? showIcon : hideIcon}
-              alt={placeholder ? placeholder : "Visibilidade da senha"}
+              alt={label ? label : "Visibilidade da senha"}
               className="h-5 w-5 m-2 select-none cursor-pointer"
             />
           </div>
@@ -50,7 +60,7 @@ function TextInput({
           <div className="right-0 outline-none w-[40px]">
             <img
               src={icon}
-              alt={placeholder ? placeholder : "Icone do input"}
+              alt={label ? label : "Icone do input"}
               className="h-5 w-5 m-2 select-none cursor-pointer"
             />
           </div>
@@ -63,7 +73,7 @@ function TextInput({
       >
         {errorMessage}
       </p>
-    </>
+    </div>
   );
 }
 

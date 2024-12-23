@@ -80,5 +80,36 @@ async function registerUser(userData) {
   }
 }
 
+async function getAllCampus() {
+  try {
+    const response = await fetch("http://localhost:3333/campus/list");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function validateMailCode(userData) {
+  const options = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/validatemailcode",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
 // exportando as funções:
-export { checktoken, loginUser, sendMailCode, registerUser };
+export { checktoken, loginUser, sendMailCode, registerUser, getAllCampus, validateMailCode };
