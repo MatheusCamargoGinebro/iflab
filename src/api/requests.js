@@ -13,25 +13,43 @@ async function checktoken() {
     const response = await fetch("http://localhost:3333/user/data", options);
     const data = await response.json();
 
-    return data.status;
+    return data;
   } catch (err) {
     return false;
   }
 }
 
 // Função para login:
-async function loginUser(userData) {
+async function loginUser(email, password) {
   const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      user_email: userData.email,
-      user_password: userData.password,
+      user_email: email,
+      user_password: password,
     }),
   };
 
   try {
     const response = await fetch("http://localhost:3333/user/login", options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function logoutUser(token) {
+  const options = {
+    method: "POST",
+    headers: {
+      "x-access-token": token,
+    },
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/user/logout", options);
     const data = await response.json();
 
     return data;
@@ -112,4 +130,12 @@ async function validateMailCode(userData) {
 }
 
 // exportando as funções:
-export { checktoken, loginUser, sendMailCode, registerUser, getAllCampus, validateMailCode };
+export {
+  checktoken,
+  loginUser,
+  logoutUser,
+  sendMailCode,
+  registerUser,
+  getAllCampus,
+  validateMailCode,
+};

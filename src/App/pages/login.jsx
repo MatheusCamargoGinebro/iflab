@@ -73,9 +73,7 @@ function Login() {
 
   // Login:
   async function handleLogin() {
-    const result = await loginUser(userData);
-
-    console.log(result);
+    const result = await loginUser(userData.email, userData.password);
 
     if (result.status) {
       localStorage.setItem("token", result.token);
@@ -98,7 +96,12 @@ function Login() {
     <div className="h-screen w-screen bg-iflab_white_dark flex justify-center items-center">
       <form
         className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (checkData.email && checkData.password) {
+            handleLogin();
+          }
+        }}
       >
         <div className="flex justify-center">
           <h1 className="text-2xl">

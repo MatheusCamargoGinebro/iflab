@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import showIcon from "../../assets/icons/UI/show.png";
 import hideIcon from "../../assets/icons/UI/hide.png";
 
+
 // Input que pode ser de diferentes tipos.
 // Se for do tipo senha, ele pode ser ocultado ou exibido.
 function TextInput({ icon, type, name, label, onChange, state, errorMessage, predata }) {

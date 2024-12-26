@@ -1,15 +1,20 @@
-function TButton({ text, onClick, submit }) {
-    return (
-      <>
-        <button
-          onClick={onClick}
-          type="button"
-          className="text-iflab_green font-medium hover:text-iflab_green_light underline duration-75"
-        >
-          {text}
-        </button>
-      </>
-    );
-  }
-  
-  export default TButton;
+function TButton({ text, onClick, disabled }) {
+  return (
+    <>
+      <button
+        onClick={onClick}
+        type="button"
+        className={`font-medium duration-75 ${
+          disabled
+            ? "text-iflab_gray_light hover:text-iflab_gray cursor-not-allowed"
+            : " text-iflab_green hover:text-iflab_green_light underline cursor-pointer"
+        }`}
+        disabled={disabled}
+      >
+        {text}
+      </button>
+    </>
+  );
+}
+
+export default TButton;

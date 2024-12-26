@@ -1,10 +1,11 @@
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../../components/header/Header";
 
 function Home() {
-
   return (
     <>
-      <h1>Home</h1>
+      <Header />
       <div className="fixed bottom-3 right-3 shadow-md rounded-lg bg-iflab_white_light p-5">
         <ul>
           <li>

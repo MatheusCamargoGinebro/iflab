@@ -22,6 +22,7 @@ import {
   validateMailCode,
   registerUser,
   getAllCampus,
+  loginUser,
 } from "../../api/requests";
 
 /* O=============================================================================================O */
@@ -77,13 +78,24 @@ function Register() {
     userData.user_campusId = parseInt(userData.user_campusId);
     userData.user_type = parseInt(userData.user_type);
 
-    console.log("userData:\n", userData);
     const result = await registerUser(userData);
 
-    console.log(result);
-
     if (result.status === true) {
-      window.location.href = "/login";
+      const loginResult = await loginUser(
+        userData.user_email,
+        userData.user_password
+      );
+
+      if (loginResult.status === false) {
+        setRequestError({
+          status: true,
+          message: loginResult.message,
+        });
+        return;
+      }
+
+      localStorage.setItem("token", loginResult.token);
+      window.location.href = "/home";
     } else {
       setRequestError({
         status: true,
@@ -325,7 +337,41 @@ function Register() {
     <div className="h-screen w-screen bg-iflab_white_dark flex justify-center items-center">
       <form
         className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          if (step === 0 && checkData.user_email) {
+            handleSendMail(newUserData.user_email);
+          }
+
+          if (step === 1 && checkData.validationCode) {
+            handleValidationCode(
+              newUserData.user_email,
+              newUserData.validationCode
+            );
+          }
+
+          if (
+            step === 2 &&
+            checkData.user_name &&
+            checkData.user_password &&
+            checkData.user_password_confirmation
+          ) {
+            stepNext();
+          }
+
+          if (step === 3 && checkData.user_type) {
+            stepNext();
+          }
+
+          if (step === 4 && checkData.user_campusId) {
+            stepNext();
+          }
+
+          if (step === 5 && readTerms) {
+            handleRegisterUser(newUserData);
+          }
+        }}
       >
         <div className="flex justify-center">
           <h1 className="text-2xl">
@@ -404,6 +450,7 @@ function Register() {
                     newUserData.validationCode
                   )
                 }
+                disabled={!checkData.validationCode}
               />
             </div>
           </div>
