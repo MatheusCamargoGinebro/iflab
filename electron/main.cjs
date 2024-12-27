@@ -7,7 +7,7 @@ function createWindow() {
     minHeight: 720,
     width: 1280,
     height: 720,
-    /* autoHideMenuBar: true, */
+    autoHideMenuBar: true,
     icon: "./src/assets/icons/iflab/icon-512.png",
     webPreferences: {
       nodeIntegration: true,

@@ -40,7 +40,9 @@ async function loginUser(email, password) {
   }
 }
 
-async function logoutUser(token) {
+async function logoutUser() {
+  const token = localStorage.getItem("token");
+
   const options = {
     method: "POST",
     headers: {
@@ -129,6 +131,131 @@ async function validateMailCode(userData) {
   }
 }
 
+async function editName(user_name) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ user_name }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/edit/name",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editEmail(user_email, validationCode) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ user_email, validationCode }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/edit/email",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editPassword(user_password) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ user_password }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/edit/password",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editPicture(user_profpic) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ user_profpic }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/edit/picture",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editType(user_type) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ user_type }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/user/edit/type",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
 // exportando as funções:
 export {
   checktoken,
@@ -138,4 +265,9 @@ export {
   registerUser,
   getAllCampus,
   validateMailCode,
+  editName,
+  editEmail,
+  editPassword,
+  editPicture,
+  editType,
 };

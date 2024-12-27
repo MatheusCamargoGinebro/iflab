@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 // importando componentes de inputs e botões:
-import TextInput from "../../components/inputs/textInput";
+import TextInput from "../../components/inputs/TextInput";
 import PButton from "../../components/buttons/PButton";
 import TButton from "../../components/buttons/TButton";
 
