@@ -117,7 +117,6 @@ function Login() {
               label="Email"
               type="email"
               name={"email-input"}
-              placeholder="Digite seu email..."
               icon={email}
               errorMessage={"Email inválido!"}
               state={userData.email.length === 0 ? true : checkData.email}
@@ -131,7 +130,6 @@ function Login() {
               label="Senha"
               type="password"
               name={"password-input"}
-              placeholder="Digite sua senha..."
               errorMessage={"Senha inválida!"}
               state={userData.password.length === 0 ? true : checkData.password}
               onChange={(e) => handlePasswordType(e)}

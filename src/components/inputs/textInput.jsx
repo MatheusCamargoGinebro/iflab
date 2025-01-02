@@ -23,7 +23,7 @@ function TextInput({ icon, type, name, label, onChange, state, errorMessage, pre
         htmlFor={name ? name : "input"}
         className={`relative duration-75${
           // Se o input estiver preenchido, ele sobe.
-          value.length > 0  || predata.length > 0
+          value.length > 0  || predata.length > 0 || !!predata
             ? " top-0 left-0"
             : " top-8 left-3 group-hover:left-4 text-iflab_gray"
         }`}

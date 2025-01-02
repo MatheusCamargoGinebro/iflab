@@ -256,6 +256,142 @@ async function editType(user_type) {
   }
 }
 
+async function getLabs() {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "GET",
+    headers: {
+      "x-access-token": token,
+    },
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/lab/list/all", options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function getLabById(labId) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ lab_id: labId }),
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/lab/list", options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function getSessionsByLabId(labId) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ session_labId: labId }),
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/session/list", options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function registerLab(newLab) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify(newLab),
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/lab/register", options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editLabName(lab_name, lab_id) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ lab_name, lab_id }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/lab/edit/name",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
+async function editLabCapacity(lab_capacity, lab_id) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ lab_capacity, lab_id }),
+  };
+
+  try {
+    const response = await fetch(
+      "http://localhost:3333/lab/edit/capacity",
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return false;
+  }
+}
+
 // exportando as funções:
 export {
   checktoken,
@@ -270,4 +406,10 @@ export {
   editPassword,
   editPicture,
   editType,
+  getLabs,
+  getLabById,
+  getSessionsByLabId,
+  registerLab,
+  editLabName,
+  editLabCapacity,
 };
