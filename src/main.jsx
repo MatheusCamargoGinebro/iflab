@@ -6,12 +6,11 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 // páginas:
-import App from "./App/App";
-import Home from "./App/pages/home";
-import Login from "./App/pages/login";
-import Register from "./App/pages/register";
-import Inventory from "./App/pages/inventory";
-import AccessManager from "./App/pages/accessmanager";
+import Home from "./App/pages/Home";
+import Login from "./App/pages/Login";
+import Register from "./App/pages/Register";
+import Inventory from "./App/pages/Inventory";
+import AccessManager from "./App/pages/Accessmanager";
 
 // Router:
 import {
@@ -21,7 +20,7 @@ import {
 } from "react-router-dom";
 
 // functions:
-import { checktoken } from "./api/requests";
+import { checktoken } from "./api/user_requests";
 
 const checkToken = await checktoken();
 

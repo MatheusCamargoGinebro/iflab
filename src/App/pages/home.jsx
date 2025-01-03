@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import addIcon from "../../assets/icons/UI/more.png";
 import potion from "../../assets/icons/UI/potion.png";
 import quantity from "../../assets/icons/UI/quantidade.png";
+import closeIcon from "../../assets/icons/UI/close.png";
 
 // API:
-import { getLabs, checktoken, registerLab } from "../../api/requests";
-import closeIcon from "../../assets/icons/UI/close.png";
+import { getLabs, registerLab } from "../../api/requests";
+import { checktoken } from "../../api/user_requests";
 
 // Componentes:
 import Header from "../../components/header/Header";
@@ -17,7 +18,7 @@ import PButton from "../../components/buttons/PButton";
 import TButton from "../../components/buttons/TButton";
 
 function Home() {
-  const [labs, setLabs] = useState([]);
+  /* const [labs, setLabs] = useState([]);
   const [showAddLabBtn, setShowAddLabBtn] = useState(false);
   const [showNewLabMenu, setShowNewLabMenu] = useState(false);
   const [formError, setFormError] = useState({
@@ -127,11 +128,11 @@ function Home() {
       setShowAddLabBtn(false);
     }
   }
-
+ */
   return (
     <>
       <Header />
-      <div className="w-screen h-screen flex flex-col items-center pt-32 px-32 bg-iflab_white_dark">
+      {/* <div className="w-screen h-screen flex flex-col items-center pt-32 px-32 bg-iflab_white_dark">
         <div className="w-full flex justify-center items-center py-5">
           <h1 className="text-xl">
             Todos os{" "}
@@ -245,7 +246,7 @@ function Home() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

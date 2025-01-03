@@ -7,11 +7,12 @@ import { useState } from "react";
 import TextInput from "../../components/inputs/TextInput";
 import PButton from "../../components/buttons/PButton";
 import TButton from "../../components/buttons/TButton";
+import ErrorModal from "../../components/Modals/ErrorModal";
 
 // importando imagens e ícones:
 import email from "../../assets/icons/UI/email.png";
 
-import { loginUser } from "../../api/requests";
+import { login } from "../../api/user_requests";
 
 /* O=============================================================================================O */
 
@@ -73,7 +74,7 @@ function Login() {
 
   // Login:
   async function handleLogin() {
-    const result = await loginUser(userData.email, userData.password);
+    const result = await login(userData.email, userData.password);
 
     if (result.status) {
       localStorage.setItem("token", result.token);
@@ -96,12 +97,7 @@ function Login() {
     <div className="h-screen w-screen bg-iflab_white_dark flex justify-center items-center">
       <form
         className="px-10 pt-5 pb-10 min-w-[28rem] bg-iflab_white rounded-md shadow-md"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (checkData.email && checkData.password) {
-            handleLogin();
-          }
-        }}
+        onSubmit={(e) => e.preventDefault()}
       >
         <div className="flex justify-center">
           <h1 className="text-2xl">
@@ -119,7 +115,7 @@ function Login() {
               name={"email-input"}
               icon={email}
               errorMessage={"Email inválido!"}
-              state={userData.email.length === 0 ? true : checkData.email}
+              state={checkData.email}
               onChange={(e) => handleMailType(e)}
             />
           </div>
@@ -131,7 +127,7 @@ function Login() {
               type="password"
               name={"password-input"}
               errorMessage={"Senha inválida!"}
-              state={userData.password.length === 0 ? true : checkData.password}
+              state={checkData.password}
               onChange={(e) => handlePasswordType(e)}
             />
           </div>
@@ -149,36 +145,20 @@ function Login() {
           </div>
           <PButton
             text="Fazer login"
-            disabled={
-              checkData.email === false || checkData.password === false
-                ? true
-                : false
-            }
+            disabled={!checkData.email || !checkData.password}
             onClick={(e) => handleLogin(e)}
           />
         </div>
       </form>
 
       {error.status ? (
-        <div className="bg-iflab_gray_light bg-opacity-50 w-screen h-screen fixed flex justify-center items-center z-50 backdrop-blur-sm">
-          <div className="bg-iflab_white rounded-md w-[30rem] shadow-xl p-5">
-            <div className="flex justify-center mb-5">
-              <h1 className="text-2xl">Houve um erro...</h1>
-            </div>
-            <div>
-              <p className="text-justify flex justify-center items-center p-5 min-h-[5rem] bg-iflab_white_dark rounded-sm w-full h-full">
-                {error.message}
-              </p>
-            </div>
-            <div className="flex justify-center pt-5 bottom-0 left-0 w-full">
-              <PButton
-                text="Tentar novamente"
-                onClick={() => setError({ ...error, status: false })}
-              />
-            </div>
-          </div>
-        </div>
-      ) : null}
+        <ErrorModal
+          message={error.message}
+          onClose={() => setError({ ...error, status: false })}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 }

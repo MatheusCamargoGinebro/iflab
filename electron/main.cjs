@@ -3,8 +3,8 @@ const { app, BrowserWindow } = require("electron");
 function createWindow() {
   const win = new BrowserWindow({
     title: "IFLab",
-    minWidth: 1280,
-    minHeight: 720,
+    minWidth: 640,
+    minHeight: 640,
     width: 1280,
     height: 720,
     autoHideMenuBar: true,
