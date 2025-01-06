@@ -20,6 +20,11 @@ async function checktoken() {
     const response = await fetch(`${API_ADDRESS}/user/data`, options);
     const data = await response.json();
 
+    // Se o token for válido, armazena os dados do usuário no localStorage:
+    if (data.status) {
+      localStorage.setItem("user", JSON.stringify(data.data));
+    }
+
     return data;
   } catch (err) {
     return { status: false, message: err };

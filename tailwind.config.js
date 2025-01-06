@@ -24,9 +24,9 @@ export default {
     screens: {
       xs: "0", /* white */
       sm: "640px", /* red */
-      md: "768px", /* yellow */
-      lg: "1024px", /* green */
-      xl: "1280px", /* blue */
+      md: "1024px", /* yellow */
+      lg: "1280px", /* green */
+      xl: "1780px", /* blue */
     },
   },
   plugins: [],

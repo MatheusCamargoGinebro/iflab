@@ -326,35 +326,6 @@ function Header() {
     return;
   }
 
-  // Função para verificar tipo de usuário:
-  function handleUserTypeChange(e) {
-    const type = parseInt(e.target.value);
-    setUserDynamicData({ ...userDynamicData, userType: type });
-
-    if (type === userStaticData.userType) {
-      setCheckData({ ...checkData, userType: false });
-      setInputErrorText({
-        ...inputErrorText,
-        userType: "O tipo de usuário deve ser diferente do atual!",
-      });
-    }
-
-    if (type < 1 || type > 3) {
-      setCheckData({ ...checkData, userType: false });
-      setInputErrorText({
-        ...inputErrorText,
-        userType: "Tipo de usuário inválido!",
-      });
-
-      return;
-    }
-
-    setCheckData({ ...checkData, userType: true });
-    setInputErrorText({ ...inputErrorText, userType: "Sem erros!" });
-
-    return;
-  }
-
   // +---------------------------------------------------------------------------------+
 
   // Funções de contato com a API:
@@ -785,7 +756,7 @@ function Header() {
                         alt="Imagem de perfil"
                         className="w-40 h-40 rounded-full border-2 border-iflab_white_dark"
                       />
-                      <div className="flex flex-col gap-2 pl-5">
+                      <div className="flex gap-2 pl-5">
                         <h3 className="text-iflab_dark text-lg flex gap-2">
                           <img
                             src={uploadIcon}
@@ -874,7 +845,12 @@ function Header() {
                     <TButton
                       text={"Salvar"}
                       onClick={() => editUserType()}
-                      disabled={!checkData.userType || userDynamicData.userType === userStaticData.userType || userDynamicData.userType < 1 || userDynamicData.userType > 3}
+                      disabled={
+                        !checkData.userType ||
+                        userDynamicData.userType === userStaticData.userType ||
+                        userDynamicData.userType < 1 ||
+                        userDynamicData.userType > 3
+                      }
                     />
                   </div>
                 </>
@@ -950,74 +926,3 @@ function Header() {
 }
 
 export default Header;
-
-/* O=============================================================================================O */
-
-//               {menuStatus.editinfosPage === 5 && (
-//                 <>
-//                   <h2 className="text-lg text-iflab_dark">
-//                     Editar tipo de usuário
-//                   </h2>
-//                   <div className="flex justify-evenly items-center gap-5 h-full">
-//                     <div
-//                       className={`rounded-lg flex flex-col items-center p-2 shadow-md hover:shadow-2xl cursor-pointer hover:scale-105 duration-75 border hover:bg-iflab_white_dark border-iflab_white_dark ${
-//                         newUserInfo.userType === 1
-//                           ? " bg-iflab_white_light"
-//                           : "bg-iflab_white"
-//                       }`}
-//                       onClick={(e) => {
-//                         setNewUserInfo({ ...newUserInfo, userType: 1 });
-//                         setCheckData({ ...CheckData, userType: true });
-//                       }}
-//                     >
-//                       <img
-//                         src={type_student}
-//                         alt="Aluno"
-//                         className="h-20 p-2 "
-//                       />
-//                       <h1>Aluno</h1>
-//                     </div>
-
-//                     <div
-//                       className={`rounded-lg flex flex-col items-center p-2 shadow-md hover:shadow-2xl cursor-pointer hover:scale-105 duration-75 border hover:bg-iflab_white_dark border-iflab_white_dark ${
-//                         newUserInfo.userType === 2
-//                           ? " bg-iflab_white_light"
-//                           : "bg-iflab_white"
-//                       }`}
-//                       onClick={(e) => {
-//                         setNewUserInfo({ ...newUserInfo, userType: 2 });
-//                         setCheckData({ ...CheckData, userType: true });
-//                       }}
-//                     >
-//                       <img
-//                         src={type_professor}
-//                         alt="Professor"
-//                         className="h-20 p-2"
-//                       />
-//                       <h1>Professor</h1>
-//                     </div>
-
-//                     <div
-//                       className={`rounded-lg flex flex-col items-center p-2 shadow-md hover:shadow-2xl cursor-pointer hover:scale-105 duration-75 border hover:bg-iflab_white_dark border-iflab_white_dark ${
-//                         newUserInfo.userType === 3
-//                           ? " bg-iflab_white_light"
-//                           : "bg-iflab_white"
-//                       }`}
-//                       onClick={(e) => {
-//                         setNewUserInfo({ ...newUserInfo, userType: 3 });
-//                         setCheckData({ ...CheckData, userType: true });
-//                       }}
-//                     >
-//                       <img src={type_other} alt="Outro" className="h-20 p-2" />
-//                       <h1>Outro</h1>
-//                     </div>
-//                   </div>
-//                   <div className="flex justify-end items-end w-full">
-//                     <TButton
-//                       text={"Salvar"}
-//                       onClick={() => editUserType()}
-//                       disabled={!CheckData.userType}
-//                     />
-//                   </div>
-//                 </>
-//               )}

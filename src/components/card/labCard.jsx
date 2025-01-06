@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+// O=============================================================================================O */
 
-import {
-  getLabById,
-  getSessionsByLabId,
-  editLabName,
-  editLabCapacity,
-} from "../../api/requests";
+// Hooks de estados:
+import React, { useState, useEffect } from "react";
 
+// API:
+import { getLabById, getLabSessions } from "../../api/lab_requests";
+
+// O=============================================================================================O */
+
+// Icones:
 import alert from "../../assets/icons/UI/alert.png";
 import check from "../../assets/icons/UI/check.png";
 import edit from "../../assets/icons/UI/edit.png";
@@ -15,274 +17,174 @@ import closeIcon from "../../assets/icons/UI/close.png";
 import potion from "../../assets/icons/UI/potion.png";
 import quantity from "../../assets/icons/UI/quantidade.png";
 
+// Componentes:
 import PButton from "../buttons/PButton";
 import SButton from "../buttons/SButton";
 import TButton from "../buttons/TButton";
 import TextInput from "../inputs/TextInput";
+import EditLabModal from "../Modals/EditLabModal";
 
-function LabCard({ labId }) {
-  const [lab, setLab] = useState({});
+// O=============================================================================================O */
 
-  async function getLabData() {
-    const data = await getLabById(labId);
+function LabCard({ labId, userAccessLevel }) {
+  const [labInfo, setLabInfo] = useState(null);
+  const [sessionsList, setSessionsList] = useState([]);
+  const [latestSession, setLatestSession] = useState(null);
 
-    if (data.status) {
-      setLab(data.lab[0]);
-    }
-  }
-
-  const [session, setSession] = useState({});
-
-  async function getSessionsData() {
-    const data = await getSessionsByLabId(labId);
-
-    if (data.status) {
-      // Percorre toda a lista de sessões do laboratório e identifica a que estiver mais próxima de acontecer, a que está acontecendo, ou a última que aconteceu.
-    } else {
-      setSession({
-        sessionId: 0,
-        sessionStartsAt: "--",
-        sessionEndsAt: "--",
-        sessionStarted: false,
-        sessionEnded: false,
-        userName: "--",
-      });
-    }
-  }
+  const [showMoreInfo, setShowMoreInfo] = useState(false);
+  const [showEditWindow, setShowEditWindow] = useState(false);
+  const [showDeleteWindow, setShowDeleteWindow] = useState(false);
 
   useEffect(() => {
-    getLabData();
-    getSessionsData();
-  }, []);
+    async function fetchData() {
+      const labData = await getLabById(labId);
+      const sessionsData = await getLabSessions(labId);
 
-  const [showEditMenu, setShowEditMenu] = useState(false);
-  const [showDeleteMenu, setShowDeleteMenu] = useState(false);
+      setLabInfo(labData.lab[0]);
+      setSessionsList(sessionsData);
 
-  const [newLabData, setNewLabData] = useState({
-    labName: "",
-    labCapacity: 0,
-  });
+      // Encontra a sessão em andamento, (ou, se não houver sessão em andamento, busca a última sessão que ocorreu)
+      if (sessionsData.status) {
+        const now = new Date().getTime() / 1000;
+        let latestSession = null;
 
-  const [checkData, setCheckData] = useState({
-    name: false,
-    capacity: false,
-  });
+        for (let i = 0; i < sessionsData.data.length; i++) {
+          if (
+            sessionsData.data[i].sessionStartsAt <= now &&
+            sessionsData.data[i].sessionEndsAt >= now
+          ) {
+            latestSession = sessionsData.data[i];
+            break;
+          } else if (
+            sessionsData.data[i].sessionEndsAt < now &&
+            (latestSession === null ||
+              latestSession.sessionEndsAt < sessionsData.data[i].sessionEndsAt)
+          ) {
+            latestSession = sessionsData.data[i];
+          }
+        }
 
-  const [errorMessage, setErrorMessage] = useState({
-    name: "Sem erros",
-    capacity: "Sem erros",
-  });
-
-  function handleNameType(e) {
-    const name = e.target.value;
-
-    setNewLabData({ ...newLabData, labName: name });
-
-    if (name.length < 3) {
-      setCheckData({ ...checkData, name: false });
-      setErrorMessage({
-        ...errorMessage,
-        name: "Deve ter no mínimo 3 caracteres",
-      });
-
-      return;
-    }
-
-    if (name.length > 16) {
-      setCheckData({ ...checkData, name: false });
-      setErrorMessage({
-        ...errorMessage,
-        name: "Deve ter no máximo 16 caracteres",
-      });
-
-      return;
-    }
-
-    setCheckData({ ...checkData, name: true });
-    setErrorMessage({ ...errorMessage, name: "Sem erros" });
-
-    return;
-  }
-
-  function handleCapacityType(e) {
-    const capacity = parseInt(e.target.value);
-
-    setNewLabData({ ...newLabData, labCapacity: capacity });
-
-    if (capacity < 1) {
-      setCheckData({ ...checkData, capacity: false });
-      setErrorMessage({
-        ...errorMessage,
-        capacity: "Deve ser maior que 0",
-      });
-
-      return;
-    }
-
-    setCheckData({ ...checkData, capacity: true });
-    setErrorMessage({ ...errorMessage, capacity: "Sem erros" });
-  }
-
-  async function handleEditLab() {
-    const checkChangeDemands = {
-      name: checkData.name && newLabData.labName !== lab.labName,
-      capacity:
-        checkData.capacity && newLabData.labCapacity !== lab.labCapacity,
-    };
-
-    const metDemand = {
-      name: false,
-      capacity: false,
-    };
-
-    if (checkChangeDemands.name) {
-      const data = await editLabName(newLabData.labName, labId);
-
-      if (data.status) {
-        setNewLabData({ ...newLabData, labName: lab.labName });
-        setErrorMessage({ ...errorMessage, name: data.message });
-        metDemand.name = true;
+        setLatestSession(latestSession);
       } else {
-        setCheckData({ ...checkData, name: false });
-        setErrorMessage({ ...errorMessage, name: data.message });
+        setLatestSession({
+          sessionId: 0,
+          sessionStartsAt: 0,
+          sessionEndsAt: 0,
+          sessionStarted: false,
+          sessionFinished: false,
+          userName: 0,
+        });
       }
-    } else {
-      metDemand.name = true;
     }
 
-    if (checkChangeDemands.capacity) {
-      const data = await editLabCapacity(newLabData.labCapacity, labId);
-
-      if (data.status) {
-        setNewLabData({ ...newLabData, labCapacity: lab.labCapacity });
-        setErrorMessage({ ...errorMessage, capacity: data.message });
-        metDemand.capacity = true;
-      } else {
-        setCheckData({ ...checkData, capacity: false });
-        setErrorMessage({ ...errorMessage, capacity: data.message });
-      }
-    } else {
-      metDemand.capacity = true;
-    }
-
-    if (metDemand.name && metDemand.capacity) {
-      setShowEditMenu(false);
-
-      setNewLabData({ labName: "", labCapacity: 0 });
-      setCheckData({ name: false, capacity: false });
-      setErrorMessage({ name: "Sem erros", capacity: "Sem erros" });
-
-      getLabData();
-    }
-
-    return;
-  }
+    fetchData();
+  }, [labId]);
 
   return (
-    <>
-      <div className="group w-[33rem] h-[17rem] bg-iflab_white_light rounded-lg shadow-md hover:shadow-xl hover:scale-105 flex flex-col justify-between gap-7 py-5 px-7 duration-75">
-        <div className="flex justify-between">
-          <h1 className="text-lg">
-            Laboratório{" "}
-            <span className="font-bold text-iflab_green">{lab.labName}</span>
-          </h1>
-          <h1 className="flex items-center gap-2">
-            <img
-              src={session.Started && session.Ended ? alert : check}
-              alt="Status"
-              className="w-5 h-5"
-            />{" "}
-            {session.Started && session.Ended
-              ? "Laboratório em uso"
-              : "Laboratório disponível"}
-          </h1>
-        </div>
-        <div>
-          <h1>Usuário atual: {session.userName}</h1>
-          <h1>Horário de início da sessão: {session.sessionStartsAt}</h1>
-          <h1>Horário de término da sessão: {session.sessionEndsAt}</h1>
-        </div>
-        <div className="flex justify-between items-center gap-5">
-          <div className="flex gap-2">
-            <img
-              src={edit}
-              alt="Editar"
-              className="hidden group-hover:block w-7 h-7 rounded-full bg-iflab_white_dark hover:bg-iflab_gray_light border border-iflab_white_dark p-1 hover:border-iflab_gray_light cursor-pointer"
-              onClick={() => setShowEditMenu(true)}
-            />
-            <img
-              src={trash}
-              alt="Deletar"
-              className="hidden group-hover:block w-7 h-7 rounded-full bg-iflab_white_dark hover:bg-iflab_gray_light border border-iflab_white_dark p-1 hover:border-iflab_gray_light cursor-pointer"
-              onClick={() => setShowDeleteMenu(true)}
-            />
-          </div>
-          {session.Started && session.Ended ? (
-            <SButton text="Ver detalhes" />
-          ) : (
-            <PButton text="Iniciar sessão" />
-          )}
-        </div>
-      </div>
-      {showEditMenu && (
-        <div className="bg-iflab_gray_light bg-opacity-50 w-screen h-screen top-0 left-0 fixed flex justify-center items-center z-50 backdrop-blur-sm">
-          <div className="bg-iflab_white shadow-lg rounded-lg min-w-fit flex flex-col gap-5">
-            <div className="bg-iflab_gray_dark rounded-t-lg flex justify-between items-center p-3 gap-14">
-              <h1 className="text-lg text-iflab_white">
-                Editar informações do laboratório{" "}
-                <span className="font-bold text-iflab_green_light">
-                  {lab.labName}
-                </span>
+    !!labInfo &&
+    !!sessionsList &&
+    !!latestSession && (
+      <>
+        <div className="w-[25rem] h-[15rem] bg-iflab_white_light p-5 rounded-lg shadow-md hover:shadow-xl hover:scale-105 flex flex-col duration-75 group">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-lg text-iflab_green_light font-bold">
+                {labInfo.labName}
               </h1>
+              <h1 className="text-sm text-iflab_gray">
+                {" "}
+                capacidade: {labInfo.capacity}
+              </h1>
+            </div>
+            <h1 className="flex items-center gap-2">
               <img
-                src={closeIcon}
-                alt="Fechar"
-                className="w-5 h-5 filter hover:brightness-75 duration-75 cursor-pointer"
-                onClick={() => setShowEditMenu(false)}
+                src={
+                  latestSession.sessionFinished === false &&
+                  latestSession.sessionStarted === false
+                    ? check
+                    : alert
+                }
+                className="w-5 h-5"
               />
+              {latestSession.sessionFinished === false &&
+              latestSession.sessionStarted === false
+                ? "Livre para reservar"
+                : "Em uso atualmente"}
+            </h1>
+          </div>
+          <div className="w-full h-full p-2 flex flex-col gap-2 justify-center">
+            {latestSession.sessionId === 0 ? (
+              <h1 className="text-sm text-iflab_gray font-bold">
+                Nenhuma sessão registrada
+              </h1>
+            ) : (
+              <>
+                <h1 className="text-sm text-iflab_gray font-bold">
+                  Usuário responsável: {latestSession.userName}
+                </h1>
+                <h1 className="text-sm text-iflab_gray font-bold">
+                  Data de início da sessão: {""}
+                  {new Date(
+                    latestSession.sessionStartsAt * 1000
+                  ).toLocaleDateString()}{" "}
+                  -{" "}
+                  {new Date(
+                    latestSession.sessionStartsAt * 1000
+                  ).toLocaleTimeString()}
+                </h1>
+                <h1 className="text-sm text-iflab_gray font-bold">
+                  Data de término da sessão: {""}
+                  {new Date(
+                    latestSession.sessionEndsAt * 1000
+                  ).toLocaleDateString()}{" "}
+                  -{" "}
+                  {new Date(
+                    latestSession.sessionEndsAt * 1000
+                  ).toLocaleTimeString()}
+                </h1>
+              </>
+            )}
+          </div>
+          <div className="w-full h-fit flex justify-between items-center">
+            <div className="flex gap-2">
+              {userAccessLevel >= 2 && (
+                <>
+                  <img
+                    src={edit}
+                    alt={"edit"}
+                    className="w-7 h-7 p-1 hidden group-hover:block cursor-pointer rounded-full hover:bg-iflab_gray_medium duration-75"
+                    onClick={() => setShowEditWindow(true)}
+                  />
+                  <img
+                    src={trash}
+                    alt={"delete"}
+                    className="w-7 h-7 p-1 hidden group-hover:block cursor-pointer rounded-full hover:bg-iflab_gray_medium duration-75"
+                    onClick={() => setShowDeleteWindow(true)}
+                  />
+                </>
+              )}
             </div>
-            <div className="px-5">
-              <TextInput
-                predata={!newLabData.labName ? "" : newLabData.labName}
-                label={"Novo nome do laboratório"}
-                type={"text"}
-                icon={potion}
-                name={"lab-name-input"}
-                onChange={(e) => handleNameType(e)}
-                state={newLabData.labName.length === 0 ? true : checkData.name}
-                errorMessage={errorMessage.name}
-              />
-
-              <TextInput
-                predata={!newLabData.labCapacity ? "" : newLabData.labCapacity}
-                label={"Nova capacidade do laboratório"}
-                type={"number"}
-                icon={quantity}
-                name={"lab-capacity-input"}
-                onChange={(e) => handleCapacityType(e)}
-                state={!newLabData.labCapacity ? true : checkData.capacity}
-                errorMessage={errorMessage.capacity}
-              />
-
-              <div className="flex gap-5 justify-end py-5">
-                <TButton
-                  text={"Limpar"}
-                  onClick={() => {
-                    setNewLabData({ labName: "", labCapacity: 0 });
-                    setCheckData({ name: false, capacity: false });
-                    setErrorMessage({
-                      name: "Sem erros",
-                      capacity: "Sem erros",
-                    });
-                  }}
-                />
-                <PButton text={"Salvar"} onClick={() => handleEditLab()} />
-              </div>
-            </div>
+            {latestSession.sessionFinished === false &&
+            latestSession.sessionStarted === false ? (
+              <PButton text="Ver informações" />
+            ) : (
+              <SButton text="Ver informações" />
+            )}
           </div>
         </div>
-      )}
-    </>
+
+        {showEditWindow && (
+          <EditLabModal
+            labId={labId}
+            closeModal={() => setShowEditWindow(false)}
+          />
+        )}
+
+        {showDeleteWindow && <></>}
+
+        {showMoreInfo && <></>}
+      </>
+    )
   );
 }
 
