@@ -18,15 +18,19 @@ export default {
       iflab_green_light: "#3B6C22",
 
       iflab_red: "#FF4C4C",
+      iflab_red_dark: "#CC3A3A",
+      iflab_red_light: "#FF9999",
+
       iflab_yellow: "#FFD700",
+
       iflab_blue: "#0000FF",
     },
     screens: {
-      xs: "0", /* white */
-      sm: "640px", /* red */
-      md: "1024px", /* yellow */
-      lg: "1280px", /* green */
-      xl: "1780px", /* blue */
+      xs: "0" /* white */,
+      sm: "640px" /* red */,
+      md: "1024px" /* yellow */,
+      lg: "1280px" /* green */,
+      xl: "1780px" /* blue */,
     },
   },
   plugins: [],

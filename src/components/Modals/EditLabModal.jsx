@@ -19,6 +19,7 @@ import {
 import PButton from "../buttons/PButton";
 import TButton from "../buttons/TButton";
 import TextInput from "../inputs/TextInput";
+import ErrorModal from "./ErrorModal";
 
 // O=============================================================================================O */
 
@@ -96,6 +97,20 @@ function EditLabModal({ labId, closeModal }) {
       return;
     }
 
+    if (name === atualInfo.labName) {
+      setCheckData({
+        ...checkData,
+        labName: false,
+      });
+
+      setErrorMessage({
+        ...errorMessage,
+        labName: "Nome do laboratório igual ao atual",
+      });
+
+      return;
+    }
+
     setCheckData({
       ...checkData,
       labName: true,
@@ -130,6 +145,20 @@ function EditLabModal({ labId, closeModal }) {
       return;
     }
 
+    if (capacity === atualInfo.capacity) {
+      setCheckData({
+        ...checkData,
+        capacity: false,
+      });
+
+      setErrorMessage({
+        ...errorMessage,
+        capacity: "Capacidade igual à atual",
+      });
+
+      return;
+    }
+
     setCheckData({
       ...checkData,
       capacity: true,
@@ -145,69 +174,45 @@ function EditLabModal({ labId, closeModal }) {
   /*---------------------------------------------------------------*/
 
   async function handleEditLabName(newName) {
-    const response = await editLabName(labId, newName);
+    const response = await editLabName(newName, labId);
 
-    if (response.status === false) {
+    if (response.status) {
       setRequestResult({
         status: false,
-        message: response.message,
+        message: "",
       });
 
-      return false;
+      setAtualInfo({
+        ...atualInfo,
+        labName: newName,
+      });
+    } else {
+      setRequestResult({
+        status: true,
+        message: response.message,
+      });
     }
-
-    return true;
   }
 
   async function handleEditLabCapacity(newCapacity) {
-    const response = await editLabCapacity(labId, newCapacity);
+    const response = await editLabCapacity(newCapacity, labId);
 
-    if (response.status === false) {
+    if (response.status) {
       setRequestResult({
         status: false,
-        message: response.message,
+        message: "",
       });
 
-      return false;
-    }
-
-    return true;
-  }
-
-  /*---------------------------------------------------------------*/
-
-  function handleEditLab() {
-    const demands = {
-      labName: newInfo.labName !== atualInfo.labName,
-      capacity: newInfo.capacity !== atualInfo.capacity,
-    };
-
-    const atemptsDemands = {
-      labName: false,
-      capacity: false,
-    };
-
-    if (demands.labName && checkData.labName) {
-      atemptsDemands.labName = handleEditLabName(newInfo.labName);
-    }
-
-    if (demands.capacity && checkData.capacity) {
-      atemptsDemands.capacity = handleEditLabCapacity(newInfo.capacity);
-    }
-
-    if (atemptsDemands.labName && atemptsDemands.capacity) {
+      setAtualInfo({
+        ...atualInfo,
+        capacity: newCapacity,
+      });
+    } else {
       setRequestResult({
         status: true,
-        message: "Laboratório editado com sucesso",
+        message: response.message,
       });
-
-      return;
     }
-
-    setRequestResult({
-      status: false,
-      message: "Erro ao editar laboratório",
-    });
   }
 
   /*---------------------------------------------------------------*/
@@ -215,60 +220,98 @@ function EditLabModal({ labId, closeModal }) {
   return (
     !!atualInfo &&
     !!newInfo && (
-      <div className="w-screen h-screen flex fixed top-0 left-0 z-50 justify-center items-center bg-iflab_gray_dark bg-opacity-30 backdrop-blur-sm">
-        <div className="bg-iflab_white shadow-lg sm:rounded-lg sm:w-[40rem] sm:h-[35rem] flex flex-col xs:w-full xs:h-full xs:rounded-none">
-          <div className="bg-iflab_gray_dark sm:rounded-t-lg flex justify-between items-center p-3 xs:rounded-none">
-            <h1 className="text-lg text-iflab_white">
-              Editar informações do laboratório{" "}
-              <span className="text-iflab_green_light font-bold">
-                {atualInfo.labName}
-              </span>
-            </h1>
-            <img
-              src={close}
-              alt="close"
-              className="w-5 h-5 filter hover:brightness-75 duration-75 cursor-pointer"
-              onClick={() => closeModal()}
-            />
-          </div>
+      <>
+        <div className="w-screen h-screen flex fixed top-0 left-0 z-50 justify-center items-center bg-iflab_gray_dark bg-opacity-30 backdrop-blur-sm">
+          <div className="bg-iflab_white shadow-lg sm:rounded-lg sm:w-[40rem] sm:h-[35rem] flex flex-col xs:w-full xs:h-full xs:rounded-none">
+            <div className="bg-iflab_gray_dark sm:rounded-t-lg flex justify-between items-center p-3 xs:rounded-none">
+              <h1 className="text-lg text-iflab_white">
+                Editar informações do laboratório{" "}
+                <span className="text-iflab_green_light font-bold">
+                  {atualInfo.labName}
+                </span>
+              </h1>
+              <img
+                src={close}
+                alt="close"
+                className="w-5 h-5 filter hover:brightness-75 duration-75 cursor-pointer"
+                onClick={() => closeModal()}
+              />
+            </div>
 
-          <div className="w-full h-full p-14 flex flex-col gap-5">
-            <TextInput
-              predata={newInfo.labName}
-              icon={potion}
-              type="text"
-              name={"labName-input"}
-              label={"Nome do laboratório"}
-              state={checkData.labName}
-              errorMessage={errorMessage.labName}
-              onChange={(e) => handleNameType(e)}
-            />
+            <div className="w-full h-full p-14 flex flex-col gap-5">
+              <div className="flex gap-2">
+                <div className="w-[70%]">
+                  <TextInput
+                    predata={newInfo.labName}
+                    icon={potion}
+                    type="text"
+                    name={"labName-input"}
+                    label={"Digite o novo nome do laboratório"}
+                    state={checkData.labName}
+                    errorMessage={errorMessage.labName}
+                    onChange={(e) => handleNameType(e)}
+                  />
+                </div>
+                <div className="w-[30%] flex justify-center items-center">
+                  <PButton
+                    text={"Salvar"}
+                    disabled={
+                      !checkData.labName ||
+                      newInfo.labName === atualInfo.labName
+                    }
+                    onClick={() => handleEditLabName(newInfo.labName)}
+                  />
+                </div>
+              </div>
 
-            <TextInput
-              predata={newInfo.capacity}
-              icon={quantity}
-              type="number"
-              name={"capacity-input"}
-              label={"Capacidade do laboratório"}
-              state={checkData.capacity}
-              errorMessage={errorMessage.capacity}
-              onChange={(e) => handleCapacityType(e)}
-            />
-            <div className="flex justify-end">
-              <TButton
-                text="Destazer alterações"
+              <div className="flex gap-2">
+                <div className="w-[70%]">
+                  <TextInput
+                    predata={newInfo.capacity}
+                    icon={quantity}
+                    type="number"
+                    name={"capacity-input"}
+                    label={"Digite a nova capacidade do laboratório"}
+                    state={checkData.capacity}
+                    errorMessage={errorMessage.capacity}
+                    onChange={(e) => handleCapacityType(e)}
+                  />
+                </div>
+                <div className="w-[30%] flex justify-center items-center">
+                  <PButton
+                    text={"Salvar"}
+                    disabled={
+                      !checkData.capacity ||
+                      newInfo.capacity === atualInfo.capacity
+                    }
+                    onClick={() => handleEditLabCapacity(newInfo.capacity)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full p-10 justify-end flex gap-5">
+              <TButton text="Cancelar" onClick={() => closeModal()} />
+
+              <PButton
+                text="Reverter alterações"
                 onClick={() => setNewInfo(atualInfo)}
-                disabled={newInfo === atualInfo}
+                disabled={
+                  newInfo.labName === atualInfo.labName &&
+                  newInfo.capacity === atualInfo.capacity
+                }
               />
             </div>
           </div>
-
-          <div className="w-full p-10 justify-end flex gap-5">
-            <TButton text="Cancelar" onClick={() => closeModal()} />
-            <PButton text="Salvar alterações" />
-          </div>
         </div>
-      </div>
+
+        {requestResult.status && (
+          <ErrorModal
+            message={requestResult.message}
+            onClose={() => setRequestResult({ status: false, message: "" })}
+          />
+        )}
+      </>
     )
   );
 }

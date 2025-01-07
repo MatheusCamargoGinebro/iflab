@@ -13,16 +13,14 @@ import alert from "../../assets/icons/UI/alert.png";
 import check from "../../assets/icons/UI/check.png";
 import edit from "../../assets/icons/UI/edit.png";
 import trash from "../../assets/icons/UI/delete.png";
-import closeIcon from "../../assets/icons/UI/close.png";
-import potion from "../../assets/icons/UI/potion.png";
 import quantity from "../../assets/icons/UI/quantidade.png";
 
 // Componentes:
 import PButton from "../buttons/PButton";
 import SButton from "../buttons/SButton";
-import TButton from "../buttons/TButton";
-import TextInput from "../inputs/TextInput";
 import EditLabModal from "../Modals/EditLabModal";
+import DeleteLabModal from "../Modals/DeleteLabModal";
+import LabInfoModal from "../Modals/LabInfoModal";
 
 // O=============================================================================================O */
 
@@ -99,15 +97,17 @@ function LabCard({ labId, userAccessLevel }) {
             <h1 className="flex items-center gap-2">
               <img
                 src={
-                  latestSession.sessionFinished === false &&
-                  latestSession.sessionStarted === false
+                  latestSession.sessionFinished === true ||
+                  (latestSession.sessionStarted === false &&
+                    latestSession.sessionFinished === false)
                     ? check
                     : alert
                 }
                 className="w-5 h-5"
               />
-              {latestSession.sessionFinished === false &&
-              latestSession.sessionStarted === false
+              {latestSession.sessionFinished === true ||
+              (latestSession.sessionStarted === false &&
+                latestSession.sessionFinished === false)
                 ? "Livre para reservar"
                 : "Em uso atualmente"}
             </h1>
@@ -120,7 +120,8 @@ function LabCard({ labId, userAccessLevel }) {
             ) : (
               <>
                 <h1 className="text-sm text-iflab_gray font-bold">
-                  Usuário responsável: {latestSession.userName}
+                  {latestSession.sessionFinished === true ? " último " : ""}{" "}
+                  usuário responsável: {latestSession.userName}
                 </h1>
                 <h1 className="text-sm text-iflab_gray font-bold">
                   Data de início da sessão: {""}
@@ -147,7 +148,7 @@ function LabCard({ labId, userAccessLevel }) {
           </div>
           <div className="w-full h-fit flex justify-between items-center">
             <div className="flex gap-2">
-              {userAccessLevel >= 2 && (
+              {userAccessLevel >= 3 && (
                 <>
                   <img
                     src={edit}
@@ -164,11 +165,18 @@ function LabCard({ labId, userAccessLevel }) {
                 </>
               )}
             </div>
-            {latestSession.sessionFinished === false &&
-            latestSession.sessionStarted === false ? (
-              <PButton text="Ver informações" />
+            {latestSession.sessionFinished === true ||
+            (latestSession.sessionStarted === false &&
+              latestSession.sessionFinished === false) ? (
+              <PButton
+                text="Ver informações"
+                onClick={() => setShowMoreInfo(true)}
+              />
             ) : (
-              <SButton text="Ver informações" />
+              <SButton
+                text="Ver informações"
+                onClick={() => setShowMoreInfo(true)}
+              />
             )}
           </div>
         </div>
@@ -180,9 +188,23 @@ function LabCard({ labId, userAccessLevel }) {
           />
         )}
 
-        {showDeleteWindow && <></>}
+        {showDeleteWindow && (
+          <DeleteLabModal
+            labId={labId}
+            labName={labInfo.labName}
+            closeModal={() => setShowDeleteWindow(false)}
+          />
+        )}
 
-        {showMoreInfo && <></>}
+        {showMoreInfo && (
+          <LabInfoModal
+            labInfo={labInfo}
+            userAccessLevel={userAccessLevel}
+            latestSession={latestSession}
+            sessionList={sessionsList}
+            closeModal={() => setShowMoreInfo(false)}
+          />
+        )}
       </>
     )
   );
