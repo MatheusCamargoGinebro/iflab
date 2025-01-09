@@ -1,11 +1,13 @@
 // O=============================================================================================O */
 
 // Hooks de state:
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 // Icones:
 import close from "../../assets/icons/UI/close.png";
+import schedule from "../../assets/icons/UI/schedule.png";
 
+// Imagens:
 import lab_inventory from "../../assets/icons/UI/potion.png";
 import access_manegement from "../../assets/icons/UI/access-management.png";
 import inventory_relatory from "../../assets/icons/UI/inventory-relatory.png";
@@ -18,6 +20,8 @@ import {} from "../../api/lab_requests";
 import PButton from "../buttons/PButton";
 import SButton from "../buttons/SButton";
 import TButton from "../buttons/TButton";
+import SessionListModal from "./SessionListModal";
+import NewSessionModal from "./NewSessionModal";
 
 function LabInfoModal({
   labInfo,
@@ -27,6 +31,7 @@ function LabInfoModal({
   userAccessLevel,
 }) {
   const [showSessionList, setShowSessionList] = useState(false);
+  const [showAddSession, setShowAddSession] = useState(false);
 
   return (
     <>
@@ -48,61 +53,12 @@ function LabInfoModal({
           </div>
           <div className="w-full h-full flex flex-col">
             {showSessionList ? (
-              <>
-                <div className="w-full h-full p-5 border-b border-iflab_gray_light">
-                  <div className="flex justify-between items-center">
-                    <h1 className="text-lg text-iflab_gray_dark font-bold">
-                      Lista de sessões
-                    </h1>
-                    <TButton
-                      text={"Voltar"}
-                      onClick={() => setShowSessionList(false)}
-                    />
-                  </div>
-                  <div className="w-full h-full p-5 flex flex-col gap-1 items-center">
-                    {sessionList.status === true ? (
-                      <div className="w-fit h-[80%] p-5 grid grid-cols-2 gap-10 overflow-y-auto">
-                        {sessionList.data.map((session) => (
-                          <div
-                            key={session.sessionId}
-                            className="w-52 h-fit bg-iflab_white_light rounded-lg shadow-md hover:shadow-lg hover:bg-iflab_white_dark duration-75 p-5"
-                          >
-                            <h1 className="text-sm text-iflab_gray font-bold">
-                              Responsável: {session.userName}
-                            </h1>
-                            <h1 className="text-sm text-iflab_gray font-bold">
-                              Data:{" "}
-                              {new Date(
-                                session.sessionStartsAt * 1000
-                              ).toLocaleDateString()}{" "}
-                            </h1>
-                            <h1 className="text-sm text-iflab_gray font-bold">
-                              horário:{" "}
-                              {new Date(
-                                session.sessionStartsAt * 1000
-                              ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}{" "}
-                              -{" "}
-                              {new Date(
-                                session.sessionEndsAt * 1000
-                              ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
-                            </h1>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <h1 className="text-sm text-iflab_gray font-bold">
-                        Nenhuma sessão encontrada
-                      </h1>
-                    )}
-                  </div>
-                </div>
-              </>
+              <SessionListModal
+                sessionList={sessionList}
+                closeModal={() => setShowSessionList(false)}
+              />
+            ) : showAddSession ? (
+              <NewSessionModal closeModal={() => setShowAddSession(false)} labId={labInfo.labID} />
             ) : (
               <>
                 <div className="w-full h-full p-5 border-b border-iflab_gray_light">
@@ -175,7 +131,7 @@ function LabInfoModal({
                           <PButton text="Encerrar sessão" />
                         </>
                       ) : (
-                        <PButton text="Marcar nova sessão" />
+                        <PButton text="Agendar sessão" icon={schedule} onClick={() => setShowAddSession(true)} />
                       ))}
                   </div>
                 </div>

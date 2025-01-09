@@ -78,6 +78,38 @@ async function getLabSessions(session_labId) {
 
 // O==========================================================================O
 
+// Função para iniciar uma sessão de um laboratório:
+async function registerSession(
+  session_start_at,
+  session_end_at,
+  session_labId
+) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ session_start_at, session_end_at, session_labId }),
+  };
+
+  try {
+    const response = await fetch(
+      `${API_ADDRESS}/lab/session/register`,
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return { status: false, message: err };
+  }
+}
+
+// O==========================================================================O
+
 // Função para encerrar uma sessão de um laboratório:
 async function endSession(session_id) {
   const token = localStorage.getItem("token");
@@ -214,6 +246,8 @@ export {
   getLabs,
   getLabById,
   getLabSessions,
+  registerSession,
+  endSession,
   registerNewLab,
   deleteLab,
   editLabName,

@@ -5,8 +5,8 @@ function PButton({ text, onClick, disabled, goodAction = true, icon = null }) {
         onClick={onClick}
         type="button"
         className={`py-2 ${
-          !!icon ? " px-2 " : " px-6 "
-        } min-w-32 rounded-md duration-75 ${
+          !!icon ? " px-2 " : " px-6 min-w-32"
+        } rounded-md duration-75 ${
           disabled
             ? "bg-iflab_white_dark text-iflab_gray_light hover:bg-iflab_white_light cursor-not-allowed"
             : goodAction
@@ -20,7 +20,9 @@ function PButton({ text, onClick, disabled, goodAction = true, icon = null }) {
             <img
               src={icon}
               alt="text"
-              className="w-5 h-5 mr-2 filter brightness-[1000%]"
+              className={`w-5 h-5 filter brightness-[1000%] ${
+                text ? "mr-2" : ""
+              }`}
             />
           )}
           {text}
