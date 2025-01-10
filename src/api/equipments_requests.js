@@ -28,8 +28,33 @@ async function getLabEquipments(lab_id) {
   }
 }
 
+async function addEquipment(session_id, session_equipment) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ session_id, session_equipment }),
+  };
+
+  try {
+    const response = await fetch(
+      `${API_ADDRESS}/lab/session/equipment/add`,
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return { status: false, message: err };
+  }
+}
+
 // O==========================================================================O
 
-export { getLabEquipments };
+export { getLabEquipments, addEquipment };
 
 // O==========================================================================O
