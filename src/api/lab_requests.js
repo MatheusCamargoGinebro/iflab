@@ -133,6 +133,7 @@ async function endSession(session_id) {
   }
 }
 
+
 // O==========================================================================O
 
 // Função para registrar um novo laboratório:

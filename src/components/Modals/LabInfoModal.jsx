@@ -14,7 +14,7 @@ import inventory_relatory from "../../assets/icons/UI/inventory-relatory.png";
 import access_relatory from "../../assets/icons/UI/access-relatory.png";
 
 // API:
-import {} from "../../api/lab_requests";
+import { endSession } from "../../api/lab_requests";
 
 // Componentes:
 import PButton from "../buttons/PButton";
@@ -37,6 +37,16 @@ function LabInfoModal({
     show: false,
     session: latestSession.sessionId,
   });
+
+  async function endSessionHandler() {
+    const response = await endSession(latestSession.sessionId);
+
+    if (response.status === true) {
+      window.location.href = "/home";
+    } else {
+      alert(response.message);
+    }
+  }
 
   return (
     <>
@@ -162,7 +172,10 @@ function LabInfoModal({
                             }
                           />
 
-                          <SButton text="Encerrar sessão" />
+                          <SButton
+                            text="Encerrar sessão"
+                            onClick={() => endSessionHandler()}
+                          />
                           <PButton
                             text="Agendar sessão"
                             icon={schedule}
