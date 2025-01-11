@@ -28,6 +28,36 @@ async function getLabElements(lab_id) {
   }
 }
 
+// O==========================================================================O
+
+// Função para obter os elementos de uma sessão:
+async function getSessionElements(session_id) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ session_id }),
+  };
+
+  try {
+    const response = await fetch(
+      `${API_ADDRESS}/lab/session/element/list`,
+      options
+    );
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return { status: false, message: err };
+  }
+}
+
+// O==========================================================================O
+
 // Função para adicionar um elemento a uma sessão:
 async function addElement(session_id, session_element) {
   const token = localStorage.getItem("token");
@@ -84,6 +114,6 @@ async function removeElement(session_id, session_element) {
 
 // O==========================================================================O
 
-export { getLabElements, addElement, removeElement };
+export { getLabElements, getSessionElements, addElement, removeElement };
 
 // O==========================================================================O

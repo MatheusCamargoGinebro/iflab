@@ -76,6 +76,8 @@ function Login() {
   async function handleLogin() {
     const result = await login(userData.email, userData.password);
 
+    console.log(result);
+
     if (result.status) {
       localStorage.setItem("token", result.token);
       window.location.href = "/home";

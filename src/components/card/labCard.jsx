@@ -34,17 +34,28 @@ function LabCard({ labId, userAccessLevel }) {
   const [showDeleteWindow, setShowDeleteWindow] = useState(false);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchLabData() {
       const labData = await getLabById(labId);
+
+      if (labData.status) {
+        setLabInfo(labData.lab[0]);
+      } else {
+        setLabInfo(null);
+      }
+
+      return;
+    }
+
+    async function fetchSessionsData() {
       const sessionsData = await getLabSessions(labId);
 
-      setLabInfo(labData.lab[0]);
-      setSessionsList(sessionsData);
-
-      // Encontra a sessão em andamento, (ou, se não houver sessão em andamento, busca a última sessão que ocorreu)
       if (sessionsData.status) {
+        setSessionsList(sessionsData.data);
+
+        // Encontra a última sessão:
         const now = new Date().getTime() / 1000;
         let latestSession = null;
+        let nextFutureSession = null;
 
         for (let i = 0; i < sessionsData.data.length; i++) {
           if (
@@ -62,20 +73,42 @@ function LabCard({ labId, userAccessLevel }) {
           }
         }
 
+        // Verifica se não encontrou uma sessão atual ou passada
+        if (latestSession === null) {
+          for (let i = 0; i < sessionsData.data.length; i++) {
+            if (sessionsData.data[i].sessionStartsAt > now) {
+              if (
+                nextFutureSession === null ||
+                sessionsData.data[i].sessionStartsAt <
+                  nextFutureSession.sessionStartsAt
+              ) {
+                nextFutureSession = sessionsData.data[i];
+              }
+            }
+          }
+          latestSession = nextFutureSession;
+        }
+
         setLatestSession(latestSession);
+
+        return;
       } else {
+        setSessionsList([]);
         setLatestSession({
           sessionId: 0,
           sessionStartsAt: 0,
           sessionEndsAt: 0,
           sessionStarted: false,
           sessionFinished: false,
-          userName: 0,
+          userName: "",
         });
       }
+
+      return;
     }
 
-    fetchData();
+    fetchLabData();
+    fetchSessionsData();
   }, [labId]);
 
   return (

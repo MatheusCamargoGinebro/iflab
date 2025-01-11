@@ -307,26 +307,15 @@ function NewSessionModal({ labId, closeModal }) {
 
     // Loop para reservar equipamentos foreach:
     reservedEquipments.forEach(async (equipment) => {
-      const result = await addEquipment(sessionId, equipment.session_equipment);
-
-      if (result.status === false) {
-        setRequestError({ status: true, message: result.message });
-        return;
-      }
+      await addEquipment(sessionId, equipment.session_equipment);
     });
 
     // Loop para reservar elementos foreach:
     reservedElements.forEach(async (element) => {
-      const result = await addElement(sessionId, element.session_element);
-
-      if (result.status === false) {
-        setRequestError({ status: true, message: result.message });
-        return;
-      }
+      await addElement(sessionId, element.session_element);
     });
 
-    window.location.reload();
-
+    closeModal();
     return;
   }
 
@@ -539,18 +528,22 @@ function NewSessionModal({ labId, closeModal }) {
                   <div className="w-[32rem] h-full border border-iflab_gray_medium rounded-lg">
                     <div className="flex flex-col gap-5 w-full h-fit max-h-[22rem] overflow-y-scroll p-5">
                       {elementList.map((element) => (
-                        <SmallElementCard
-                          key={element.elementId}
-                          element={element}
-                          onType={(value) =>
-                            handleTypeQuantity(
-                              element.elementId,
-                              value,
-                              parseFloat(element.Quantity)
-                            )
-                          }
-                          typed_quantity={elementQuantity(element.elementId)}
-                        />
+                        <>
+                          <SmallElementCard
+                            key={element.elementId}
+                            element={element}
+                            onType={(value) =>
+                              handleTypeQuantity(
+                                element.elementId,
+                                value,
+                                parseFloat(element.Quantity)
+                              )
+                            }
+                            typed_quantity={elementQuantity(element.elementId)}
+                          />
+
+                          {console.log(reservedElements)}
+                        </>
                       ))}
                     </div>
                   </div>

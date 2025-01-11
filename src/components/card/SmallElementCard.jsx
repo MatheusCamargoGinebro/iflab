@@ -30,7 +30,7 @@ function SmallElementCard({ element, typed_quantity, onType }) {
             <li className="text-iflab_gray text-sm">EC: {element.ECNumber}</li>
             <li
               className={`text-iflab_gray text-sm ${
-                element.expirationDate < Date.now() ? "text-iflab_red" : ""
+                element.expirationDate < Date.now()/1000 ? "text-iflab_red" : "text-iflab_green_light"
               }`}
             >
               Validade:{" "}

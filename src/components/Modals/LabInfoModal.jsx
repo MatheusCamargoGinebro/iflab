@@ -22,6 +22,7 @@ import SButton from "../buttons/SButton";
 import TButton from "../buttons/TButton";
 import SessionListModal from "./SessionListModal";
 import NewSessionModal from "./NewSessionModal";
+import ReservedItems from "./ReservedItems";
 
 function LabInfoModal({
   labInfo,
@@ -32,6 +33,10 @@ function LabInfoModal({
 }) {
   const [showSessionList, setShowSessionList] = useState(false);
   const [showAddSession, setShowAddSession] = useState(false);
+  const [showReservedItems, setShowReservedItems] = useState({
+    show: false,
+    session: latestSession.sessionId,
+  });
 
   return (
     <>
@@ -58,7 +63,23 @@ function LabInfoModal({
                 closeModal={() => setShowSessionList(false)}
               />
             ) : showAddSession ? (
-              <NewSessionModal closeModal={() => setShowAddSession(false)} labId={labInfo.labID} />
+              <NewSessionModal
+                closeModal={() => {
+                  setShowAddSession(false);
+                  window.location.href = "/home";
+                }}
+                labId={labInfo.labID}
+              />
+            ) : showReservedItems.show ? (
+              <ReservedItems
+                sessionId={showReservedItems.session}
+                closeModal={() =>
+                  setShowReservedItems({
+                    show: false,
+                    session: latestSession.sessionId,
+                  })
+                }
+              />
             ) : (
               <>
                 <div className="w-full h-full p-5 border-b border-iflab_gray_light">
@@ -68,7 +89,9 @@ function LabInfoModal({
                         ? "Nenhuma sessão marcada"
                         : latestSession.sessionFinished === true
                         ? "Última sessão marcada"
-                        : "Sessão em andamento"}
+                        : latestSession.sessionStarted === true
+                        ? "Sessão em andamento"
+                        : "Próxima sessão marcada"}
                     </h1>
                     <TButton
                       text={"Ver sessões"}
@@ -117,7 +140,9 @@ function LabInfoModal({
                           ).toLocaleTimeString()}{" "}
                           {latestSession.sessionFinished === true
                             ? " (finalizada)"
-                            : " (em andamento)"}
+                            : latestSession.sessionStarted === true
+                            ? " (em andamento)"
+                            : ""}
                         </h1>
                       </>
                     )}
@@ -127,11 +152,29 @@ function LabInfoModal({
                       (latestSession.sessionStarted === true &&
                       latestSession.sessionFinished === false ? (
                         <>
-                          <SButton text="Marcar nova sessão" />
-                          <PButton text="Encerrar sessão" />
+                          <TButton
+                            text="Ver insumos"
+                            onClick={() =>
+                              setShowReservedItems({
+                                show: true,
+                                session: latestSession.sessionId,
+                              })
+                            }
+                          />
+
+                          <SButton text="Encerrar sessão" />
+                          <PButton
+                            text="Agendar sessão"
+                            icon={schedule}
+                            onClick={() => setShowAddSession(true)}
+                          />
                         </>
                       ) : (
-                        <PButton text="Agendar sessão" icon={schedule} onClick={() => setShowAddSession(true)} />
+                        <PButton
+                          text="Agendar sessão"
+                          icon={schedule}
+                          onClick={() => setShowAddSession(true)}
+                        />
                       ))}
                   </div>
                 </div>
