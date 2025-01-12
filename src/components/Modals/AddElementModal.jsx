@@ -6,29 +6,26 @@ import React, { useState } from "react";
 // Importando imagens e ícones:
 import close from "../../assets/icons/UI/close.png";
 import potion from "../../assets/icons/UI/potion.png";
-import trash from "../../assets/icons/UI/delete.png";
 import chevrom from "../../assets/icons/UI/chevrom.png";
 import equipment from "../../assets/icons/UI/equipment.png";
 import cas from "../../assets/icons/UI/cas-number.png";
 import ec from "../../assets/icons/UI/ec-number.png";
-import TextInput from "../inputs/TextInput";
 import quantity from "../../assets/icons/UI/access-relatory.png";
 
 // Importando componente:
 import PButton from "../buttons/PButton";
-import TButton from "../buttons/TButton";
+import TextInput from "../inputs/TextInput";
 import ErrorModal from "../Modals/ErrorModal";
 
 // API:
 import { RegisterElement } from "../../api/elements_requests";
-import { parse } from "postcss";
 
 /* O=============================================================================================O */
 
 function AddElementModal({ labId, closeModal }) {
   const [page, setPage] = useState(1);
 
-  function nexpage() {
+  function nextpage() {
     if (page < 4) {
       setPage(page + 1);
     }
@@ -719,7 +716,11 @@ function AddElementModal({ labId, closeModal }) {
                       <img
                         src={newElementInfo.element_image || potion}
                         alt="Elemento"
-                        className="w-40 h-40 rounded-full"
+                        className={`object-cover ${
+                          newElementInfo.element_image === ""
+                            ? "h-20 w-20"
+                            : "h-full w-full"
+                        }`}
                       />
                     </div>
                     <h1 className="text-iflab_gray text-sm">
@@ -748,7 +749,7 @@ function AddElementModal({ labId, closeModal }) {
                     className={`rounded-lg w-6 flex justify-end ${
                       page !== 4 ? "bg-iflab_white_light cursor-pointer" : ""
                     }`}
-                    onClick={() => nexpage()}
+                    onClick={() => nextpage()}
                   >
                     <img
                       src={chevrom}
@@ -783,8 +784,6 @@ function AddElementModal({ labId, closeModal }) {
           </div>
         </div>
       </div>
-
-      {console.log(newElementInfo, checkData, errorMessage)}
 
       {requestError.status && (
         <ErrorModal

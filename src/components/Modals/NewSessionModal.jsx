@@ -7,7 +7,6 @@ import React, { useState, useEffect } from "react";
 
 // Componentes:
 import PButton from "../buttons/PButton";
-import SButton from "../buttons/SButton";
 import TButton from "../buttons/TButton";
 import ErrorModal from "../Modals/ErrorModal";
 import SmallElementCard from "../card/smallElementCard";

@@ -70,7 +70,7 @@ function ElementCard({ elementId }) {
               <div className="text-sm flex items-center justify-center gap-2 p-1 border-b border-iflab_gray_medium">
                 <img src={alert2} alt="Alert" className="w-5 h-5" />
                 <h1>
-                  Elemento sob supervisão do{" "}
+                Material sob supervisão do{" "}
                   <span className="font-bold"> exército</span>
                 </h1>
               </div>
@@ -78,7 +78,7 @@ function ElementCard({ elementId }) {
               <div className="text-sm flex items-center justify-center gap-2 p-1 border-b border-iflab_gray_medium">
                 <img src={check} alt="Alert" className="w-5 h-5" />
                 <h1>
-                  Elemento sob supervisão do{" "}
+                Material sob supervisão do{" "}
                   <span className="font-bold">IFLab</span>
                 </h1>
               </div>

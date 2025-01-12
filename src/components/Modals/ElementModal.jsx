@@ -37,7 +37,7 @@ function ElementModal({ element, closeModal, reload }) {
   const [page, setpage] = useState(1);
   const [subPage, setSubPage] = useState(1);
 
-  function nexpage() {
+  function nextPage() {
     if (subPage < 3) {
       setSubPage(subPage + 1);
     }
@@ -145,7 +145,23 @@ function ElementModal({ element, closeModal, reload }) {
       });
       setErrorMessage({
         ...errorMessage,
-        Quantity: "A quantidade do elemento deve ser maior que 0.",
+        Quantity: "Inválido",
+      });
+
+      return;
+    }
+
+    console.log(e.target.value);
+
+    if (isNaN(quantity) || quantity === null || e.target.value === "") {
+      setCheckData({
+        ...checkData,
+        Quantity: false,
+      });
+
+      setErrorMessage({
+        ...errorMessage,
+        Quantity: "Inválido",
       });
 
       return;
@@ -228,6 +244,20 @@ function ElementModal({ element, closeModal, reload }) {
       setErrorMessage({
         ...errorMessage,
         molecularWeight: "A massa molar do elemento deve ser maior que 0.",
+      });
+
+      return;
+    }
+
+    if (isNaN(molarMass) || molarMass === null || e.target.value === "") {
+      setCheckData({
+        ...checkData,
+        molecularWeight: false,
+      });
+
+      setErrorMessage({
+        ...errorMessage,
+        molecularWeight: "Inválido",
       });
 
       return;
@@ -605,7 +635,7 @@ function ElementModal({ element, closeModal, reload }) {
                           src={element.image || potion}
                           alt={"Elemento"}
                           className={`${
-                            !!element.image ? "w-full h-full" : ""
+                            !!element.image ? "w-full h-full object-cover" : ""
                           }`}
                         />
                       </div>
@@ -864,7 +894,11 @@ function ElementModal({ element, closeModal, reload }) {
                                 <img
                                   src={newElementInfo.image || potion}
                                   alt="Elemento"
-                                  className="w-40 h-40 rounded-full"
+                                  className={`${
+                                    !!newElementInfo.image
+                                      ? "object-cover w-full h-full"
+                                      : ""
+                                  }`}
                                 />
                               </div>
 
@@ -901,7 +935,7 @@ function ElementModal({ element, closeModal, reload }) {
                             ? "bg-iflab_white_light cursor-pointer"
                             : ""
                         }`}
-                        onClick={() => nexpage()}
+                        onClick={() => nextPage()}
                       >
                         <img
                           src={chevrom}
@@ -981,7 +1015,7 @@ function ElementModal({ element, closeModal, reload }) {
               ) : (
                 <div className="w-full h-full gap-2 flex flex-col p-5">
                   <h1 className="text-sm text-iflab_gray font-bold">
-                    Excluir do elemento
+                    Excluir elemento
                   </h1>
                   <div className="w-full h-[80%] p-5 flex flex-col items-center justify-center gap-10">
                     <h1 className="text-lg text-iflab_gray">

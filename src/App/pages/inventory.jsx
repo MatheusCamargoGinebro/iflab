@@ -10,6 +10,7 @@ import Header from "../../components/header/Header";
 import ElementCard from "../../components/card/ElementCard";
 import AddElementModal from "../../components/Modals/AddElementModal";
 import EquipmentCard from "../../components/card/EquipmentCard";
+import AddEquipment from "../../components/Modals/AddEquipment";
 
 // Importando imagens e ícones:
 import more from "../../assets/icons/UI/more.png";
@@ -78,17 +79,18 @@ function Inventory() {
     !!elementsList &&
     !!equipmentsList && (
       <>
-        <div className="w-screen h-screen flex flex-col p-5 pb-0 overflow-hidden">
+        <div className="w-screen h-screen flex flex-col pb-0 overflow-hidden">
           <Header />
 
           <div
-            className="w-fit h-fit p-5 bg-iflab_white_light hover:bg-iflab_white_dark rounded-lg shadow-lg cursor-pointer duration-75"
+            className=" z-50 w-fit h-fit m-5 p-5 bg-iflab_white_light hover:bg-iflab_white_dark rounded-lg shadow-lg cursor-pointer duration-75 fixed"
             onClick={() => (window.location.href = "/home")}
           >
             <h1>Voltar para tela inicial</h1>
           </div>
-          <div className="w-full h-full mt-10">
-            <div className="w-full flex justify-center">
+
+          <div className="h-full bottom-0 pb-64 flex gap-10 items-center flex-col overflow-y-auto">
+            <div className="w-full flex justify-center mt-32 text-center">
               <h1 className="text-2xl">
                 Inventário do laboratório{" "}
                 <span className="text-iflab_green_light font-bold">
@@ -96,35 +98,59 @@ function Inventory() {
                 </span>
               </h1>
             </div>
+            <div className="flex flex-col gap-5">
+              <h2 className="text-xl font-semibold border-b border-iflab_gray_medium">
+                Elementos:
+              </h2>
+              <div className="w-fit grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {elementsList.map(
+                  (element, index) =>
+                    elementsList.length > 0 && (
+                      <ElementCard key={index} elementId={element.elementId} />
+                    )
+                )}
+                <div
+                  className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
+                  onClick={() => setShowAddElementModal(true)}
+                >
+                  <img
+                    src={more}
+                    alt="Adicionar elemento"
+                    className="w-32 h-32"
+                  />
+                  <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
+                    Adicionar elemento
+                  </h1>
+                </div>
+              </div>
+            </div>
 
-            <div className="h-full mx-32 mt-10 bottom-0 pt-5 pb-64 flex gap-10 items-center flex-col overflow-y-auto">
-              <div className="flex flex-col gap-5">
-                <h2 className="text-xl font-semibold border-b border-iflab_gray_medium">
-                  Elementos:
-                </h2>
-                <div className="w-fit grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {elementsList.map(
-                    (element, index) =>
-                      elementsList.length > 0 && (
-                        <ElementCard
-                          key={index}
-                          elementId={element.elementId}
-                        />
-                      )
-                  )}
-                  <div
-                    className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
-                    onClick={() => setShowAddElementModal(true)}
-                  >
-                    <img
-                      src={more}
-                      alt="Adicionar elemento"
-                      className="w-32 h-32"
-                    />
-                    <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
-                      Adicionar elemento
-                    </h1>
-                  </div>
+            <div className="flex flex-col gap-5 mt-14">
+              <h2 className="text-xl font-semibold border-b border-iflab_gray_medium">
+                Equipamentos:
+              </h2>
+              <div className="w-fit grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {equipmentsList.map(
+                  (equipment, index) =>
+                    equipmentsList.length > 0 && (
+                      <EquipmentCard
+                        key={index}
+                        equipmentId={equipment.equipmentId}
+                      />
+                    )
+                )}
+                <div
+                  className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
+                  onClick={() => setShowAddEquipmentModal(true)}
+                >
+                  <img
+                    src={more}
+                    alt="Adicionar equipamento"
+                    className="w-32 h-32"
+                  />
+                  <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
+                    Adicionar equipamento
+                  </h1>
                 </div>
               </div>
             </div>
@@ -137,7 +163,12 @@ function Inventory() {
             closeModal={() => setShowAddElementModal(false)}
           />
         )}
-        {showAddEquipmentModal && <></>}
+        {showAddEquipmentModal && (
+          <AddEquipment
+            labId={labId}
+            closeModal={() => setShowAddEquipmentModal(false)}
+          />
+        )}
       </>
     )
   );

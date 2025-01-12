@@ -1,7 +1,6 @@
 // O=============================================================================================O */
 
 // Hooks de state:
-import React, { useState, useEffect } from "react";
 
 // Icones:
 import trash from "../../assets/icons/UI/delete.png";
