@@ -99,7 +99,7 @@ function Inventory() {
               </h1>
             </div>
             <div className="flex flex-col gap-5">
-              <h2 className="text-xl font-semibold border-b border-iflab_gray_medium">
+              <h2 className="w-full text-xl font-semibold border-b border-iflab_gray_medium">
                 Elementos:
               </h2>
               <div className="w-fit grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -132,7 +132,7 @@ function Inventory() {
             </div>
 
             <div className="flex flex-col gap-5 mt-14">
-              <h2 className="text-xl font-semibold border-b border-iflab_gray_medium">
+              <h2 className="w-full text-xl font-semibold border-b border-iflab_gray_medium">
                 Equipamentos:
               </h2>
               <div className="w-fit grid gap-10 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

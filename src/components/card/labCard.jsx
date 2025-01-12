@@ -4,7 +4,11 @@
 import React, { useState, useEffect } from "react";
 
 // API:
-import { getLabById, getLabSessions } from "../../api/lab_requests";
+import {
+  getLabById,
+  getLabSessions,
+  getLabUserRelation,
+} from "../../api/lab_requests";
 
 // O=============================================================================================O */
 
@@ -13,7 +17,6 @@ import alert from "../../assets/icons/UI/alert.png";
 import check from "../../assets/icons/UI/check.png";
 import edit from "../../assets/icons/UI/edit.png";
 import trash from "../../assets/icons/UI/delete.png";
-import quantity from "../../assets/icons/UI/quantidade.png";
 
 // Componentes:
 import PButton from "../buttons/PButton";
@@ -24,7 +27,7 @@ import LabInfoModal from "../Modals/LabInfoModal";
 
 // O=============================================================================================O */
 
-function LabCard({ labId, userAccessLevel }) {
+function LabCard({ labId }) {
   const [labInfo, setLabInfo] = useState(null);
   const [sessionsList, setSessionsList] = useState([]);
   const [latestSession, setLatestSession] = useState(null);
@@ -32,6 +35,7 @@ function LabCard({ labId, userAccessLevel }) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
   const [showEditWindow, setShowEditWindow] = useState(false);
   const [showDeleteWindow, setShowDeleteWindow] = useState(false);
+  const [userLevel, setUserLevel] = useState(null);
 
   useEffect(() => {
     async function fetchLabData() {
@@ -41,6 +45,14 @@ function LabCard({ labId, userAccessLevel }) {
         setLabInfo(labData.lab);
       } else {
         setLabInfo(null);
+      }
+
+      const userlab = await getLabUserRelation(labId);
+
+      if (userlab.status === false) {
+        setUserLevel(0);
+      } else {
+        setUserLevel(userlab.data.userLevel);
       }
 
       return;
@@ -114,7 +126,8 @@ function LabCard({ labId, userAccessLevel }) {
   return (
     !!labInfo &&
     !!sessionsList &&
-    !!latestSession && (
+    !!latestSession &&
+    !!getLabUserRelation && (
       <>
         <div className="w-[25rem] h-[15rem] bg-iflab_white_light p-5 rounded-lg shadow-md hover:shadow-xl hover:scale-105 flex flex-col duration-75 group">
           <div className="flex justify-between items-center">
@@ -181,7 +194,7 @@ function LabCard({ labId, userAccessLevel }) {
           </div>
           <div className="w-full h-fit flex justify-between items-center">
             <div className="flex gap-2">
-              {userAccessLevel >= 3 && (
+              {userLevel >= 3 && (
                 <>
                   <img
                     src={edit}
@@ -218,6 +231,7 @@ function LabCard({ labId, userAccessLevel }) {
           <EditLabModal
             labId={labId}
             closeModal={() => setShowEditWindow(false)}
+            reload={() => window.location.reload()}
           />
         )}
 
@@ -232,7 +246,7 @@ function LabCard({ labId, userAccessLevel }) {
         {showMoreInfo && (
           <LabInfoModal
             labInfo={labInfo}
-            userAccessLevel={userAccessLevel}
+            userAccessLevel={userLevel}
             latestSession={latestSession}
             sessionList={sessionsList}
             closeModal={() => setShowMoreInfo(false)}
