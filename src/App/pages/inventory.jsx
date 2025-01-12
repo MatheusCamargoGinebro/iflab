@@ -2,7 +2,6 @@
 
 // Importando ferramentas do React:
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 // Importando componentes:
@@ -18,7 +17,7 @@ import more from "../../assets/icons/UI/more.png";
 // API:
 import { getLabElements } from "../../api/elements_requests";
 import { getLabEquipments } from "../../api/equipments_requests";
-import { getLabById } from "../../api/lab_requests";
+import { getLabById, getLabUserRelation } from "../../api/lab_requests";
 
 // Renderização do componente:
 function Inventory() {
@@ -33,51 +32,52 @@ function Inventory() {
   const [showAddElementModal, setShowAddElementModal] = useState(false);
   const [showAddEquipmentModal, setShowAddEquipmentModal] = useState(false);
 
+  const [userLevel, setUserLevel] = useState(null);
+
   useEffect(() => {
-    async function fetchElements() {
-      const elements = await getLabElements(labId);
+    async function fetchData() {
+      const userlab = await getLabUserRelation(labId);
 
-      if (elements.status) {
-        setElementsList(elements.data);
-      } else {
-        setElementsList([]);
-      }
-
-      return;
-    }
-
-    async function fetchEquipments() {
-      const equipments = await getLabEquipments(labId);
-
-      if (equipments.status) {
-        setEquipmentsList(equipments.data);
-      } else {
-        setEquipmentsList([]);
-      }
-
-      return;
-    }
-
-    async function fetchLabInfo() {
-      const lab = await getLabById(labId);
-
-      if (lab.status) {
-        setLabInfo(lab.lab);
-      } else {
+      if (userlab.status === false) {
         window.location.href = "/home";
+      } else {
+        setUserLevel(userlab.data.userLevel);
+
+        const elements = await getLabElements(labId);
+        const equipments = await getLabEquipments(labId);
+        const lab = await getLabById(labId);
+
+        if (elements.status) {
+          setElementsList(elements.data);
+        } else {
+          setElementsList([]);
+        }
+
+        if (equipments.status) {
+          setEquipmentsList(equipments.data);
+        } else {
+          setEquipmentsList([]);
+        }
+
+        if (lab.status) {
+          setLabInfo(lab.lab);
+        } else {
+          window.location.href = "/home";
+        }
+
+        return;
       }
 
       return;
     }
 
-    fetchLabInfo();
-    fetchElements();
-    fetchEquipments();
+    fetchData();
   }, [labId]);
 
   return (
     !!elementsList &&
-    !!equipmentsList && (
+    !!equipmentsList &&
+    !!userLevel && (
       <>
         <div className="w-screen h-screen flex flex-col pb-0 overflow-hidden">
           <Header />
@@ -106,22 +106,28 @@ function Inventory() {
                 {elementsList.map(
                   (element, index) =>
                     elementsList.length > 0 && (
-                      <ElementCard key={index} elementId={element.elementId} />
+                      <ElementCard
+                        key={index}
+                        elementId={element.elementId}
+                        userLevel={userLevel}
+                      />
                     )
                 )}
-                <div
-                  className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
-                  onClick={() => setShowAddElementModal(true)}
-                >
-                  <img
-                    src={more}
-                    alt="Adicionar elemento"
-                    className="w-32 h-32"
-                  />
-                  <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
-                    Adicionar elemento
-                  </h1>
-                </div>
+                {userLevel >= 2 && (
+                  <div
+                    className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
+                    onClick={() => setShowAddElementModal(true)}
+                  >
+                    <img
+                      src={more}
+                      alt="Adicionar elemento"
+                      className="w-32 h-32"
+                    />
+                    <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
+                      Adicionar elemento
+                    </h1>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -136,22 +142,25 @@ function Inventory() {
                       <EquipmentCard
                         key={index}
                         equipmentId={equipment.equipmentId}
+                        userLevel={userLevel}
                       />
                     )
                 )}
-                <div
-                  className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
-                  onClick={() => setShowAddEquipmentModal(true)}
-                >
-                  <img
-                    src={more}
-                    alt="Adicionar equipamento"
-                    className="w-32 h-32"
-                  />
-                  <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
-                    Adicionar equipamento
-                  </h1>
-                </div>
+                {userLevel >= 2 && (
+                  <div
+                    className="w-[20rem] h-[25rem] bg-iflab_white_light rounded-lg hover:scale-105 shadow-md hover:shadow-lg cursor-pointer duration-75 flex flex-col justify-center items-center group"
+                    onClick={() => setShowAddEquipmentModal(true)}
+                  >
+                    <img
+                      src={more}
+                      alt="Adicionar equipamento"
+                      className="w-32 h-32"
+                    />
+                    <h1 className="font-bold text-iflab_gray_light group-hover:text-iflab_gray duration-75">
+                      Adicionar equipamento
+                    </h1>
+                  </div>
+                )}
               </div>
             </div>
           </div>

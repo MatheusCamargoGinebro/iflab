@@ -16,7 +16,7 @@ import { getEquipmentById } from "../../api/equipments_requests";
 
 /* O=============================================================================================O */
 
-function EquipmentCard({ equipmentId }) {
+function EquipmentCard({ equipmentId, userLevel }) {
   const [equipment, setEquipment] = useState(null);
 
   const [showMoreInfo, setShowMoreInfo] = useState(false);
@@ -112,6 +112,7 @@ function EquipmentCard({ equipmentId }) {
             equipment={equipment}
             closeModal={() => setShowMoreInfo(false)}
             reload={() => window.location.reload()}
+            userLevel={userLevel}
           />
         )}
       </>

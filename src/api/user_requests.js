@@ -297,6 +297,56 @@ async function editType(user_type) {
 
 // O==========================================================================O
 
+// Função para obter usuários de um laboratório:
+async function getLabUsers(lab_id) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ lab_id }),
+  };
+
+  try {
+    const response = await fetch(`${API_ADDRESS}/lab/users`, options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return { status: false, message: err };
+  }
+}
+
+// O==========================================================================O
+
+// Função para obter usuários de um campus:
+async function getCampusUsers(campus_id) {
+  const token = localStorage.getItem("token");
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": token,
+    },
+    body: JSON.stringify({ campus_id }),
+  };
+
+  try {
+    const response = await fetch(`${API_ADDRESS}/campus/users`, options);
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    return { status: false, message: err };
+  }
+}
+
+// O==========================================================================O
+
 // Exportando funções de requisição para o servidor:
 export {
   checktoken,
@@ -310,6 +360,8 @@ export {
   editPassword,
   editPicture,
   editType,
+  getLabUsers,
+  getCampusUsers,
 };
 
 // O==========================================================================O

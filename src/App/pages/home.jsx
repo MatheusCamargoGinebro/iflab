@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import addIcon from "../../assets/icons/UI/more.png";
 
 // API:
-import { getLabs, registerNewLab } from "../../api/lab_requests";
+import { getLabs } from "../../api/lab_requests";
 
 // Componentes:
 import Header from "../../components/header/Header";

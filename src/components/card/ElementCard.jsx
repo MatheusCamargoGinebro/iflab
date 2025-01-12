@@ -16,7 +16,7 @@ import { getElementById } from "../../api/elements_requests";
 
 /* O=============================================================================================O */
 
-function ElementCard({ elementId }) {
+function ElementCard({ elementId, userLevel }) {
   const [showMoreInfo, setShowMoreInfo] = useState(false);
 
   const [element, setElement] = useState(null);
@@ -132,6 +132,7 @@ function ElementCard({ elementId }) {
             element={element}
             closeModal={() => setShowMoreInfo(false)}
             reload={() => window.location.reload()}
+            userLevel={userLevel}
           />
         )}
       </>

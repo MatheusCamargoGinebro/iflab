@@ -33,7 +33,7 @@ import {
 
 /* O=============================================================================================O */
 
-function ElementModal({ element, closeModal, reload }) {
+function ElementModal({ element, closeModal, reload, userLevel }) {
   const [page, setpage] = useState(1);
   const [subPage, setSubPage] = useState(1);
 
@@ -588,40 +588,42 @@ function ElementModal({ element, closeModal, reload }) {
           </div>
           <div className="w-full h-full flex flex-col">
             <div className="w-full h-full gap-2 flex flex-col">
-              <div className="w-full">
-                <ul className="flex">
-                  <li
-                    className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
-                      page === 1
-                        ? "border-b-iflab_white hover:text-iflab_gray border-r"
-                        : "border-b hover:bg-iflab_green_light hover:text-iflab_white cursor-pointer"
-                    }`}
-                    onClick={() => setpage(1)}
-                  >
-                    Detalhes
-                  </li>
-                  <li
-                    className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
-                      page === 2
-                        ? "border-b-iflab_white hover:text-iflab_gray border-x"
-                        : "border-b hover:bg-iflab_green_light hover:text-iflab_white cursor-pointer"
-                    }`}
-                    onClick={() => setpage(2)}
-                  >
-                    Editar informações
-                  </li>
-                  <li
-                    className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
-                      page === 3
-                        ? "border-b-iflab_white hover:text-iflab_gray border-l"
-                        : "border-b hover:bg-iflab_red hover:text-iflab_white cursor-pointer"
-                    }`}
-                    onClick={() => setpage(3)}
-                  >
-                    Excluir elemento
-                  </li>
-                </ul>
-              </div>
+              {userLevel >= 2 && (
+                <div className="w-full">
+                  <ul className="flex">
+                    <li
+                      className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
+                        page === 1
+                          ? "border-b-iflab_white hover:text-iflab_gray border-r"
+                          : "border-b hover:bg-iflab_green_light hover:text-iflab_white cursor-pointer"
+                      }`}
+                      onClick={() => setpage(1)}
+                    >
+                      Detalhes
+                    </li>
+                    <li
+                      className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
+                        page === 2
+                          ? "border-b-iflab_white hover:text-iflab_gray border-x"
+                          : "border-b hover:bg-iflab_green_light hover:text-iflab_white cursor-pointer"
+                      }`}
+                      onClick={() => setpage(2)}
+                    >
+                      Editar informações
+                    </li>
+                    <li
+                      className={`w-full text-center py-2 border-iflab_gray_medium duration-75 ${
+                        page === 3
+                          ? "border-b-iflab_white hover:text-iflab_gray border-l"
+                          : "border-b hover:bg-iflab_red hover:text-iflab_white cursor-pointer"
+                      }`}
+                      onClick={() => setpage(3)}
+                    >
+                      Excluir elemento
+                    </li>
+                  </ul>
+                </div>
+              )}
 
               {page === 1 ? (
                 <div className="w-full h-full gap-2 flex flex-col p-5">
