@@ -1,4 +1,4 @@
-function SButton({ text, onClick, disabled, goodAction = true }) {
+function SButton({ text, onClick, disabled, goodAction = true, icon = null }) {
   return (
     <>
       <button
@@ -13,7 +13,18 @@ function SButton({ text, onClick, disabled, goodAction = true }) {
         }`}
         disabled={disabled}
       >
-        {text}
+        <h1 className="flex items-center justify-center">
+          {!!icon && (
+            <img
+              src={icon}
+              alt="text"
+              className={`w-5 h-5 filter brightness-[0%] ${
+                text ? "mr-2" : ""
+              }`}
+            />
+          )}
+          {text}
+        </h1>
       </button>
     </>
   );

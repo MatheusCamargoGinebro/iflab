@@ -38,7 +38,7 @@ function LabCard({ labId, userAccessLevel }) {
       const labData = await getLabById(labId);
 
       if (labData.status) {
-        setLabInfo(labData.lab[0]);
+        setLabInfo(labData.lab);
       } else {
         setLabInfo(null);
       }

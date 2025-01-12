@@ -198,7 +198,7 @@ function LabInfoModal({
 
                   <div className="grid grid-rows-2 grid-cols-2 gap-5 pt-5">
                     <a
-                      href={`/accessmanager/id:${labInfo.labID}`}
+                      href={`/inventory/${labInfo.labID}`}
                       className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
                     >
                       <img
@@ -212,7 +212,7 @@ function LabInfoModal({
                     </a>
 
                     <a
-                      href={`/accessmanager/id:${labInfo.labID}`}
+                      href={`/accessmanager/${labInfo.labID}`}
                       className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
                     >
                       <img
