@@ -166,6 +166,13 @@ function Inventory() {
           </div>
         </div>
 
+        <div className="bg-iflab_red fixed bottom-0 p-2 pb-0 text-iflab_white rounded-tr-lg z-50">
+          <h1 className="text-sm">
+            Essa é uma versão BETA do IFLab. É possível que hajam alguns
+            problemas!
+          </h1>
+        </div>
+
         {showAddElementModal && (
           <AddElementModal
             labId={labId}
