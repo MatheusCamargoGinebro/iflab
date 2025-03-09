@@ -196,10 +196,10 @@ function LabInfoModal({
                     Informações sobre o laboratório
                   </h1>
 
-                  <div className="grid grid-rows-2 grid-cols-2 gap-5 pt-5">
+                  <div className="flex justify-around items-center h-full grid-cols-2 py-5">
                     <a
                       href={`/inventory/${labInfo.labID}`}
-                      className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
+                      className="w-[40%] h-fit flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
                     >
                       <img
                         src={lab_inventory}
@@ -213,7 +213,7 @@ function LabInfoModal({
 
                     <a
                       href={`/accessmanager/${labInfo.labID}`}
-                      className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
+                      className="w-[40%] h-fit flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
                     >
                       <img
                         src={access_manegement}
@@ -222,34 +222,6 @@ function LabInfoModal({
                       />
                       <h1 className="text-sm text-iflab_gray_dark font-bold text-center">
                         Gerenciar acessos <br></br>do laboratório
-                      </h1>
-                    </a>
-
-                    <a
-                      href={"/" /* Ainda não implementado */}
-                      className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
-                    >
-                      <img
-                        src={inventory_relatory}
-                        alt="Relatório de inventário"
-                        className="w-10 h-10"
-                      />
-                      <h1 className="text-sm text-iflab_gray_dark font-bold text-center">
-                        Gerar relatório de<br></br>inventário
-                      </h1>
-                    </a>
-
-                    <a
-                      href={"/" /* Ainda não implementado */}
-                      className="flex items-center justify-center gap-2 bg-iflab_white_light hover:bg-iflab_white_dark p-5 pr-7 rounded-lg duration-75"
-                    >
-                      <img
-                        src={access_relatory}
-                        alt="Relatório de acessos"
-                        className="w-10 h-10"
-                      />
-                      <h1 className="text-sm text-iflab_gray_dark font-bold text-center">
-                        Gerar relatório de<br></br>acessos
                       </h1>
                     </a>
                   </div>

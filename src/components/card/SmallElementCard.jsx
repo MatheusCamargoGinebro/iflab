@@ -11,7 +11,11 @@ import { parse } from "postcss";
 
 // Renderização:
 function SmallElementCard({ element, typed_quantity, onType }) {
-  const [checkData, setCheckData] = useState(parseFloat(typed_quantity) > parseFloat(element.totalQuantity) ? false : true);
+  const [checkData, setCheckData] = useState(
+    parseFloat(typed_quantity) > parseFloat(element.totalQuantity)
+      ? false
+      : true
+  );
 
   return (
     <div className="bg-iflab_white_light rounded-lg shadow-md p-2 w-full flex flex-col gap-2">
@@ -30,7 +34,9 @@ function SmallElementCard({ element, typed_quantity, onType }) {
             <li className="text-iflab_gray text-sm">EC: {element.ECNumber}</li>
             <li
               className={`text-iflab_gray text-sm ${
-                element.expirationDate < Date.now()/1000 ? "text-iflab_red" : "text-iflab_green_light"
+                element.expirationDate < Date.now() / 1000
+                  ? "text-iflab_red"
+                  : "text-iflab_green_light"
               }`}
             >
               Validade:{" "}
@@ -55,13 +61,19 @@ function SmallElementCard({ element, typed_quantity, onType }) {
                 value={typed_quantity}
                 onChange={(e) => {
                   if (
-                    parseFloat(e.target.value) > 0 &&
-                    parseFloat(e.target.value) <= parseFloat(element.Quantity)
+                    parseFloat(e.target.value) >= parseFloat(element.Quantity)
                   ) {
-                    setCheckData(true);
-                  } else {
-                    e.target.value = "";
                     setCheckData(false);
+                    e.target.value = parseFloat(element.Quantity);
+                  }
+
+                  if (parseFloat(e.target.value) < 0) {
+                    setCheckData(false);
+                    e.target.value = "";
+                  }
+
+                  if (parseFloat(e.target.value) >= 0) {
+                    setCheckData(true);
                   }
 
                   onType(parseFloat(e.target.value));
@@ -74,13 +86,13 @@ function SmallElementCard({ element, typed_quantity, onType }) {
                     : "border-iflab_gray_medium"
                 }`}
               />
-              <h1 className="bg-iflab_white px-2 py-1 text-iflab_gray_light">
+              <h1 className="bg-iflab_white px-2 py-1 text-iflab_gray_light w-24">
                 {element.Quantity}/
                 {element.physicalState === 1
                   ? "g"
                   : element.physicalState === 2
                   ? "mL"
-                  : ""}
+                  : "Un"}
               </h1>
             </div>
           </div>

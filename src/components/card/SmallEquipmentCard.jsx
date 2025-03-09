@@ -47,10 +47,10 @@ function SmallEquipmentCard({
           {quantity + " / " + totalQuantity}
         </h1>
         <h1
-          className={`rounded-full bg-iflab_white_dark w-5 h-5 flex justify-center items-center cursor-pointer ${
+          className={`rounded-full bg-iflab_white_dark w-5 h-5 flex justify-center items-center ${
             quantity === totalQuantity
               ? "text-iflab_gray bg-iflab_white_light cursor-default"
-              : "text-iflab_gray hover:bg-iflab_gray_medium"
+              : "text-iflab_gray hover:bg-iflab_gray_medium cursor-pointer"
           }`}
           onClick={() => increase()}
         >

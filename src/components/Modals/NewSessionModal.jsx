@@ -67,8 +67,8 @@ function NewSessionModal({ labId, closeModal }) {
   });
 
   const [checkData, setCheckData] = useState({
-    start: false,
-    end: false,
+    start: true,
+    end: true,
   });
 
   const [errorMessage, setErrorMessage] = useState({
@@ -304,18 +304,19 @@ function NewSessionModal({ labId, closeModal }) {
 
     const sessionId = result.newSessionId;
 
-    // Loop para reservar equipamentos foreach:
-    reservedEquipments.forEach(async (equipment) => {
+    // Loop para reservar equipamentos:
+    for (const equipment of reservedEquipments) {
+      console.log(equipment);
       await addEquipment(sessionId, equipment.session_equipment);
-    });
+    }
 
-    // Loop para reservar elementos foreach:
-    reservedElements.forEach(async (element) => {
+    // Loop para reservar elementos:
+    for (const element of reservedElements) {
+      console.log(element);
       await addElement(sessionId, element.session_element);
-    });
+    }
 
-    closeModal();
-    return;
+    console.log("Sessão registrada com sucesso");
   }
 
   // +---------------------------------------------------------+
@@ -526,8 +527,9 @@ function NewSessionModal({ labId, closeModal }) {
                 <div className="h-full w-full flex justify-center">
                   <div className="w-[32rem] h-full border border-iflab_gray_medium rounded-lg">
                     <div className="flex flex-col gap-5 w-full h-fit max-h-[22rem] overflow-y-scroll p-5">
-                      {elementList.map((element) => (
-                        <>
+                      {elementList.map((element) =>
+                        /* Verifica a quantidade do elemento. Se houver, mostra, senão, não mostra */
+                        element.Quantity > 0 ? (
                           <SmallElementCard
                             key={element.elementId}
                             element={element}
@@ -540,10 +542,8 @@ function NewSessionModal({ labId, closeModal }) {
                             }
                             typed_quantity={elementQuantity(element.elementId)}
                           />
-
-                          {console.log(reservedElements)}
-                        </>
-                      ))}
+                        ) : null
+                      )}
                     </div>
                   </div>
                 </div>
